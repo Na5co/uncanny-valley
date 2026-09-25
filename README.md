@@ -16,7 +16,7 @@
 
 <br>
 
-<a href="https://afterparty.theform-monorepo.workers.dev"><img src="docs/assets/front.jpg" alt="The front page of the live site: LIVE, run 7, year 6 of 15, and this season's headline, 'Census clerk arrives, counts three, leaves', with the secrets nobody in town knows yet" width="100%"></a>
+<a href="https://afterparty.theform-monorepo.workers.dev"><img src="docs/assets/front.jpg" alt="The front page of the live site: LIVE, run 7, year 7 of 15, this season's headline and what the world did, then the four camera screens" width="100%"></a>
 
 ## What is this?
 

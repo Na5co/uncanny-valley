@@ -213,6 +213,11 @@ function awayRecap(k, u) {
 
 // ---------------------------------------------------------------- the front page: the town now, and whoever you pick
 let who = (() => { const m = location.hash.match(/who=([\w-]+)/); return m && R.byId[m[1]] != null ? R.byId[m[1]] : null; })();
+/** a paragraph cut to its first sentence under a headline, the rest a click away: the top of the page is not a wall of text */
+function dek(text, pre = "") {
+  const parts = String(text || "").trim().split(/(?<=[.!?])\s+(?=[A-Z“"])/); const first = parts.shift() || "";
+  return parts.length ? `<details class="turn"><summary>${esc(pre)}${esc(first)} <small>more</small></summary>${esc(parts.join(" "))}</details>` : `<p class="turn">${esc(pre)}${esc(first)}</p>`;
+}
 function nowPage() {
   const u = R.upto(now()); const k = Math.max(0, u.k); const live = !L.ended && !L.final; const fr = R.frameAt(k);
   const e = R.epochAt(k); const since = e ? k - (e.at - 1) + 1 : 0;
@@ -225,13 +230,13 @@ function nowPage() {
   const actHead = !turn && !e && top && R.weight(top.a) >= 5;
   const wall = `<div class="wall-h"><button class="watchall" data-watch>&#9654; Watch all</button></div>${wallHtml(u, k, fr)}${who != null ? `<p class="wall-x"><button data-who="">&larr; back to the whole town</button></p>` : ""}`;
   const head = `<header class="nowh"><p class="kicker">${live ? `<span class="rec">&#9679; LIVE</span> &middot; ` : ""}Run ${L.cycle} &middot; ${esc(labelOf(k).replace(/^Year (\d+)/, `Year $1 of ${Math.round(L.ticks / 4)}`))}${live ? ` &middot; <span class="left" title="A season every ${Math.round(L.seasonMs / 60000)} minutes, ${Math.round(L.ticks / 4)} years in all: about ${Math.round(L.ticks * L.seasonMs / 3.6e6)} hours from start to end. It ends sooner if all four die.">${hoursLeft((L.ticks - L.tick) * L.seasonMs + Math.max(0, L.seasonStartedAt + L.seasonMs - now()))} of story left</span>` : ""}</p>
-    ${(() => { const h = turn ? esc(turn.headline) : e ? esc(e.headline) : actHead ? `<a href="#s${top.k}-${top.j}" data-go="s${top.k}-${top.j}">${esc(said(top.a))}.</a>` : k === 0 && !hs.length ? "A new story begins." : "A quiet season in town."; return `<h1${actHead && said(top.a).length > 60 ? ' class="long"' : ""}>${h}</h1>`; })()}
-    ${!turn && !e && k === 0 && !hs.length && L.premise ? `<p class="turn">${esc(L.premise)}</p>` : ""}
-    ${turn ? `<p class="turn">${tk === k ? "" : "Last season: "}${esc(turn.text)}</p>` : ""}
+    ${(() => { const plain = turn ? turn.headline : e ? e.headline : actHead ? `${said(top.a)}.` : k === 0 && !hs.length ? "A new story begins." : "A quiet season in town.";
+      const h = actHead ? `<a href="#s${top.k}-${top.j}" data-go="s${top.k}-${top.j}">${esc(plain)}</a>` : esc(plain); return `<h1${String(plain).length > 34 ? ' class="long"' : ""}>${h}</h1>`; })()}
+    ${!turn && !e && k === 0 && !hs.length && L.premise ? dek(L.premise) : ""}
+    ${turn ? dek(turn.text, tk === k ? "" : "Last season: ") : ""}
     <p class="when">${e && turn ? `${esc(e.headline)} ` : ""}${e ? `${since === 1 ? "It began this season." : `Its ${["", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"][since] || since + "th"} season of ${words(e.seasons)}.`} ` : ""}${top && !actHead ? `${hk === k ? "This season" : "Last season"}: <a href="#s${top.k}-${top.j}" data-go="s${top.k}-${top.j}">${esc(said(top.a))}</a>.` : k === 0 ? "The first season is under way." : ""}</p>
-    ${suspense(k, u, live, top)}
     <p class="toplinks"><a class="story-btn" href="${BASE ? BASE + "/story" : "/story"}">Read the whole story &rarr;</a><button class="story-btn ghost" data-intro>How this works</button></p>
-    ${wall}</header>`;
+    ${wall}${(() => { const s = suspense(k, u, live, top); return s ? `<div class="sp-below">${s}</div>` : ""; })()}</header>`;
   let body = "";
   if (who == null) {
     const n = nextScene(k, u); const end = L.seasonStartedAt + L.seasonMs;
