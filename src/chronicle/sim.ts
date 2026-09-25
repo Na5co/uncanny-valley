@@ -112,8 +112,36 @@ export function createChronicle(sc: ChronicleScenario, seed: number): Chronicle 
 export function saveWorld(w: Chronicle): string {
   return JSON.stringify({ ...w, scenario: undefined, rng: undefined, byId: undefined });
 }
+/** an owed deed as it was once worded, telling the old deed over again inside itself ("paid Hedda back for the time
+ *  Hedda let Teo pass, though they had wronged them"), said plainly. Wherever it stands in a line: "Teo paid them back
+ *  for the time …" in the other one's life reads "Teo paid them back for an old kindness". */
+export function owedPlain(text: string, kind?: string): string {
+  return String(text)
+    .replace(/\bpaid (\S+) back for the time .+$/, (_m, n) => (kind === "betrayal" ? `made ${n} pay for an old wrong` : `paid ${n} back for an old kindness`))
+    .replace(/\bhelped (\S+) anyway, after .+$/, "helped $1 anyway, despite an old wrong")
+    .replace(/\bhad it out with (\S+) over the time .+, then helped$/, "had it out with $1 over an old wrong, then helped")
+    .replace(/\bdid not pay (\S+) back, after .+$/, "did not pay $1 back for an old kindness");
+}
+/** every line of what happened in a world, old owed wording made plain; never anyone's own words (thought, reasons, last words) */
+function plainOwed(b: any) {
+  const kindOf = new Map<string, string>(); /* the old deed's tail tells which of the two it was: a repayment or a reckoning */
+  for (const s of b.souls ?? []) for (const d of s.deeds ?? []) { const m = /back for the time (.+)$/.exec(String(d.text ?? "")); if (m) kindOf.set(m[1], d.kind); }
+  const fix = (x: string, kind?: string) => { const m = /back for the time (.+)$/.exec(x); return owedPlain(x, kind ?? (m ? kindOf.get(m[1]) : undefined)); };
+  const TOLD = new Set(["text", "deed", "outcome", "headline"]);
+  const walk = (o: any, kind?: string): void => {
+    if (Array.isArray(o)) { o.forEach((v, i) => { if (typeof v === "string") o[i] = fix(v); else walk(v, kind); }); return; }
+    if (!o || typeof o !== "object") return;
+    for (const [k, v] of Object.entries(o)) {
+      if (typeof v === "string") { if (TOLD.has(k)) o[k] = fix(v, k === "text" ? o.kind : undefined); }
+      else if (k === "lately" || k === "journey" || k === "deeds" || k === "suffered" || k === "acts" || k === "beats" || k === "deed" || k === "souls") walk(v, o.kind);
+      else if (Array.isArray(v) && (k === "0" || /^\d+$/.test(k))) walk(v);
+    }
+  };
+  walk({ souls: b.souls, deeds: b.deeds, acts: b.acts, beats: b.beats });
+}
 export function loadWorld(json: string, sc: ChronicleScenario): Chronicle {
   const b = JSON.parse(json);
+  plainOwed(b);
   return { ...b, scenario: sc, rng: makeRng(b.seed), byId: new Map(b.souls.map((s: Soul) => [s.id, s])) } as Chronicle;
 }
 
@@ -275,15 +303,15 @@ const OWED_SPECS: Record<Owed["kind"], any> = {
   reckon: { id: "reckon", when: ["owed"], weight: 1, target: "owed",
     text: "{{when}}, {{target}} {{deedYou}}. You have not forgotten it. Now {{target}} is the one who needs something from you: a word at the council, a place in the line, a hand with the work.",
     options: [
-      { id: "hold", label: "Make {{target}} pay for it", pull: { bold: 0.3, loyal: -0.2 }, outcomes: [{ chance: 1, text: "you turn them away, and say why, where people can hear", self: { mood: 0.05 }, target: { tie: -0.3, mood: -0.1 }, deed: { kind: "betrayal", harm: 0.3, text: "paid {{target}} back for the time {{target}} {{deed3}}" } }] },
-      { id: "help", label: "Help {{target}} anyway", pull: { loyal: 0.3, sociable: 0.2 }, outcomes: [{ chance: 1, text: "you help, and neither of you says a word about it", self: {}, target: { tie: 0.25 }, deed: { kind: "mercy", help: 0.3, text: "helped {{target}} anyway, after {{target}} {{deed3}}" } }] },
-      { id: "say", label: "Have it out with {{target}}, then help", pull: { bold: 0.4, sociable: 0.1 }, outcomes: [{ chance: 1, text: "you say it, it is heard, and you help", self: {}, target: { tie: 0.05 }, deed: { kind: "justice", help: 0.15, text: "had it out with {{target}} over the time {{target}} {{deed3}}, then helped" } }] },
+      { id: "hold", label: "Make {{target}} pay for it", pull: { bold: 0.3, loyal: -0.2 }, outcomes: [{ chance: 1, text: "you turn them away, and say why, where people can hear", self: { mood: 0.05 }, target: { tie: -0.3, mood: -0.1 }, deed: { kind: "betrayal", harm: 0.3, text: "made {{target}} pay for an old wrong" } }] },
+      { id: "help", label: "Help {{target}} anyway", pull: { loyal: 0.3, sociable: 0.2 }, outcomes: [{ chance: 1, text: "you help, and neither of you says a word about it", self: {}, target: { tie: 0.25 }, deed: { kind: "mercy", help: 0.3, text: "helped {{target}} anyway, despite an old wrong" } }] },
+      { id: "say", label: "Have it out with {{target}}, then help", pull: { bold: 0.4, sociable: 0.1 }, outcomes: [{ chance: 1, text: "you say it, it is heard, and you help", self: {}, target: { tie: 0.05 }, deed: { kind: "justice", help: 0.15, text: "had it out with {{target}} over an old wrong, then helped" } }] },
     ] },
   repay: { id: "repay", when: ["owed"], weight: 1, target: "owed",
     text: "{{when}}, {{target}} {{deedYou}}. Now {{target}} is the one who is short: of food, of a place, of someone to stand up for them.",
     options: [
-      { id: "repay", label: "Pay {{target}} back", pull: { loyal: 0.4, poverty: -0.2 }, outcomes: [{ chance: 1, text: "you give what you can spare, and it is not nothing", self: { money: -0.04 }, target: { food: 0.1, tie: 0.3 }, deed: { kind: "help", help: 0.35, text: "paid {{target}} back for the time {{target}} {{deed3}}" } }] },
-      { id: "keep", label: "Keep what you have", pull: { poverty: 0.3, loyal: -0.2 }, outcomes: [{ chance: 1, text: "you keep it, and {{target}} knows it", self: {}, target: { tie: -0.3 }, deed: { kind: "abandonment", harm: 0.15, text: "did not pay {{target}} back, after {{target}} {{deed3}}" } }] },
+      { id: "repay", label: "Pay {{target}} back", pull: { loyal: 0.4, poverty: -0.2 }, outcomes: [{ chance: 1, text: "you give what you can spare, and it is not nothing", self: { money: -0.04 }, target: { food: 0.1, tie: 0.3 }, deed: { kind: "help", help: 0.35, text: "paid {{target}} back for an old kindness" } }] },
+      { id: "keep", label: "Keep what you have", pull: { poverty: 0.3, loyal: -0.2 }, outcomes: [{ chance: 1, text: "you keep it, and {{target}} knows it", self: {}, target: { tie: -0.3 }, deed: { kind: "abandonment", harm: 0.15, text: "did not pay {{target}} back for an old kindness" } }] },
     ] },
 };
 /** the owed scene, filled from the record's own words for the deed */

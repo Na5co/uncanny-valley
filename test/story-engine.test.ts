@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { createChronicle, stepChronicle, saveWorld, loadWorld } from "../src/chronicle/sim.ts";
+import { createChronicle, stepChronicle, saveWorld, loadWorld, owedPlain } from "../src/chronicle/sim.ts";
 import { secretsOf, keepTurn, directorSystem } from "../src/chronicle/director.ts";
 import { parseCited, chapterBrief, checkLine } from "../src/chronicle/teller.ts";
 import { buildChronicleRecord } from "../src/chronicle/archive.ts";
@@ -103,4 +103,18 @@ test("the director never steers an experiment, and its turn stays out of an expe
   const s = w.souls.find((x: any) => x.named);
   assert.doesNotMatch(liveSection(w, s, { spec: { id: "x", experiment: { id: "e" } }, text: "", options: [] } as any), /The watch wants a name/);
   assert.match(liveSection(w, s, { spec: { id: "x" }, text: "", options: [] } as any), /The watch wants a name/);
+});
+
+test("a paying-back deed says it plainly, and one worded the old way is put right when the world loads", async () => {
+  const old = "paid Hedda back for the time Hedda let Teo pass, though they had wronged them";
+  assert.equal(owedPlain(old, "help"), "paid Hedda back for an old kindness");
+  assert.equal(owedPlain(old, "betrayal"), "made Hedda pay for an old wrong");
+  assert.equal(owedPlain("split the sack fairly with Hedda", "help"), "split the sack fairly with Hedda");
+  const w: any = createChronicle({ ...four, cast: company, castPick: 4, fill: { ...(four.fill ?? {}), count: 0 } }, 2);
+  await stepChronicle(w); const s = w.souls[0];
+  const d = { tick: 1, kind: "help", actor: s.id, target: null, harm: 0, help: 0.35, text: old, witnessed: true };
+  s.deeds.push(d); w.acts[0].push({ c: s.id, kind: "help", text: old });
+  const back: any = loadWorld(saveWorld(w), w.scenario);
+  assert.equal(back.souls[0].deeds.at(-1).text, "paid Hedda back for an old kindness");
+  assert.equal(back.acts[0].at(-1).text, "paid Hedda back for an old kindness");
 });

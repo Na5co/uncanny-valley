@@ -174,14 +174,16 @@ function watchAll() {
 /** Suspense the record already holds, shown without ever asking the reader anything: the set-ups the world has promised
  *  and when they fall due, the things one of the four did that the town does not know, and, for someone coming back, what
  *  happened while they were away. */
-function suspense(k, u, live) {
+function suspense(k, u, live, shown = null) {
   const t = k + 1; const rows = [];
   if (live) {
     for (const s of (L.setups || []).filter((x) => x.closed == null && x.at <= t && x.due >= t && x.due - t <= 4).slice(-2)) {
       const dueK = s.due - 1; rows.push(`<p class="sp-row sp-wait"><span class="sp-k">The town is waiting for</span>${esc(String(s.what).replace(/\.$/, ""))} <small>${dueK <= k ? "any day now" : `by ${esc(labelOf(dueK).toLowerCase())}`}</small></p>`); }
     const aired = (x, i) => { const sk = x.tick - 1; if (sk < u.k) return true; if (sk > u.k) return false; const kind = String(x.id).split(":")[2]; return R.acts(sk).some((a, j) => a.c === i && a.kind === kind && R.shown(sk, j, u)); };
     const exposedIds = new Set(); for (let kk = 0; kk <= k; kk++) R.acts(kk).forEach((a, j) => { if (a.kind === "exposed" && R.shown(kk, j, u)) exposedIds.add(a.c); });
-    for (const x of (L.secrets || []).filter((x) => { const i = R.byId[x.who]; return i != null && aired(x, i); }).slice(-2)) { const i = R.byId[x.who]; if (i == null) continue;
+    // (a secret already told above, as this season's or last season's decision, is not told again)
+    const told = (x) => shown && x.tick - 1 === shown.k && R.byId[x.who] === shown.a.c && String(x.id).split(":")[2] === shown.a.kind;
+    for (const x of (L.secrets || []).filter((x) => { const i = R.byId[x.who]; return i != null && aired(x, i) && !told(x); }).slice(-2)) { const i = R.byId[x.who]; if (i == null) continue;
       rows.push(`<p class="sp-row sp-secret"><span class="sp-k">Nobody in town knows</span>${px(i, { res: 24 })}${esc(x.text)} <small>${esc(labelOf(x.tick - 1).toLowerCase())}, kept ${plural(Math.max(0, k - (x.tick - 1)), "season", "seasons")}</small></p>`); }
     for (let kk = Math.max(0, k - 3); kk <= k; kk++) R.acts(kk).forEach((a, j) => { if (a.kind === "exposed" && R.shown(kk, j, u)) rows.push(`<p class="sp-row sp-out"><span class="sp-k">It came out</span>${esc(String(a.text || "").replace(/^was found out: they /, `${nm(a.c)} `))} <small>${esc(labelOf(kk).toLowerCase())}</small></p>`); });
   }
@@ -219,13 +221,15 @@ function nowPage() {
   const top = [...hs].sort((x, y) => R.weight(y.a) - R.weight(x.a))[0];
   // what the world did this season that nobody chose, or last season's if this one has none
   const tk = [k, k - 1].find((x) => x >= 0 && L.turns?.[x + 1]?.headline); const turn = tk != null ? L.turns[tk + 1] : null;
+  // with nothing from the world and no hardship, the season's heaviest decision is the headline itself (and is not said twice)
+  const actHead = !turn && !e && top && R.weight(top.a) >= 5;
   const wall = `<div class="wall-h"><button class="watchall" data-watch>&#9654; Watch all</button></div>${wallHtml(u, k, fr)}${who != null ? `<p class="wall-x"><button data-who="">&larr; back to the whole town</button></p>` : ""}`;
   const head = `<header class="nowh"><p class="kicker">${live ? `<span class="rec">&#9679; LIVE</span> &middot; ` : ""}Run ${L.cycle} &middot; ${esc(labelOf(k).replace(/^Year (\d+)/, `Year $1 of ${Math.round(L.ticks / 4)}`))}${live ? ` &middot; <span class="left" title="A season every ${Math.round(L.seasonMs / 60000)} minutes, ${Math.round(L.ticks / 4)} years in all: about ${Math.round(L.ticks * L.seasonMs / 3.6e6)} hours from start to end. It ends sooner if all four die.">${hoursLeft((L.ticks - L.tick) * L.seasonMs + Math.max(0, L.seasonStartedAt + L.seasonMs - now()))} of story left</span>` : ""}</p>
-    <h1>${turn ? esc(turn.headline) : e ? esc(e.headline) : top && R.weight(top.a) >= 5 ? esc(said(top.a)) + "." : k === 0 && !hs.length ? "A new story begins." : "A quiet season in town."}</h1>
+    ${(() => { const h = turn ? esc(turn.headline) : e ? esc(e.headline) : actHead ? `<a href="#s${top.k}-${top.j}" data-go="s${top.k}-${top.j}">${esc(said(top.a))}.</a>` : k === 0 && !hs.length ? "A new story begins." : "A quiet season in town."; return `<h1${actHead && said(top.a).length > 60 ? ' class="long"' : ""}>${h}</h1>`; })()}
     ${!turn && !e && k === 0 && !hs.length && L.premise ? `<p class="turn">${esc(L.premise)}</p>` : ""}
     ${turn ? `<p class="turn">${tk === k ? "" : "Last season: "}${esc(turn.text)}</p>` : ""}
-    <p class="when">${e && turn ? `${esc(e.headline)} ` : ""}${e ? `${since === 1 ? "It began this season." : `Its ${["", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"][since] || since + "th"} season of ${words(e.seasons)}.`} ` : ""}${top ? `${hk === k ? "This season" : "Last season"}: <a href="#s${top.k}-${top.j}" data-go="s${top.k}-${top.j}">${esc(said(top.a))}</a>.` : k === 0 ? "The first season is under way." : ""}</p>
-    ${suspense(k, u, live)}
+    <p class="when">${e && turn ? `${esc(e.headline)} ` : ""}${e ? `${since === 1 ? "It began this season." : `Its ${["", "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"][since] || since + "th"} season of ${words(e.seasons)}.`} ` : ""}${top && !actHead ? `${hk === k ? "This season" : "Last season"}: <a href="#s${top.k}-${top.j}" data-go="s${top.k}-${top.j}">${esc(said(top.a))}</a>.` : k === 0 ? "The first season is under way." : ""}</p>
+    ${suspense(k, u, live, top)}
     <p class="toplinks"><a class="story-btn" href="${BASE ? BASE + "/story" : "/story"}">Read the whole story &rarr;</a><button class="story-btn ghost" data-intro>How this works</button></p>
     ${wall}</header>`;
   let body = "";
