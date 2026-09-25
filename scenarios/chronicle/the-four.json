@@ -1,0 +1,561 @@
+{
+  "id": "the-four",
+  "mode": "chronicle",
+  "title": "The Four",
+  "premise": "Four people, four temperaments, one pit town at the edge of a bad fifteen years. The rest of the lane are strangers they will come to know. A bad harvest, a sickness, a war and a hard winter will come through, and nobody is told when.",
+  "years": 15,
+  "startYear": 1,
+  "fingerprint": {
+    "setting": "one lane in a pit town, early industrial",
+    "pressure": "famine, plague, war and winter across fifteen years, ten people",
+    "endingShape": "who is alive, and what they did to be",
+    "dynamic": "neighbours who owe each other, over a lifetime"
+  },
+  "socialQuestion": {
+    "text": "Which temperament turns, and which one dies?",
+    "hypothesis": "The bold turn and live; the loyal are the ones the town buries."
+  },
+  "locations": [
+    {
+      "id": "lane",
+      "name": "The Lane",
+      "tags": [
+        "home",
+        "rest"
+      ],
+      "x": 0.3,
+      "y": 0.62
+    },
+    {
+      "id": "pit",
+      "name": "The Pit",
+      "tags": [
+        "work"
+      ],
+      "x": 0.72,
+      "y": 0.28
+    },
+    {
+      "id": "field",
+      "name": "Long Field",
+      "tags": [
+        "work",
+        "home"
+      ],
+      "x": 0.22,
+      "y": 0.22
+    },
+    {
+      "id": "square",
+      "name": "The Square",
+      "tags": [
+        "public",
+        "social",
+        "work"
+      ],
+      "x": 0.6,
+      "y": 0.66
+    },
+    {
+      "id": "chapel",
+      "name": "The Chapel",
+      "tags": [
+        "public"
+      ],
+      "x": 0.84,
+      "y": 0.72
+    }
+  ],
+  "paths": [
+    [
+      "lane",
+      "pit"
+    ],
+    [
+      "lane",
+      "field"
+    ],
+    [
+      "lane",
+      "square"
+    ],
+    [
+      "square",
+      "chapel"
+    ],
+    [
+      "square",
+      "pit"
+    ],
+    [
+      "field",
+      "pit"
+    ]
+  ],
+  "jobs": [
+    {
+      "id": "miner",
+      "name": "miner",
+      "at": "pit",
+      "pay": 0.09,
+      "risk": 0.03
+    },
+    {
+      "id": "farmhand",
+      "name": "farmhand",
+      "at": "field",
+      "pay": 0.065
+    },
+    {
+      "id": "shop",
+      "name": "shopkeeper",
+      "at": "square",
+      "pay": 0.11
+    },
+    {
+      "id": "clerk",
+      "name": "pit clerk",
+      "at": "pit",
+      "pay": 0.1
+    },
+    {
+      "id": "doctor",
+      "name": "doctor",
+      "at": "square",
+      "pay": 0.12
+    }
+  ],
+  "epochs": [
+    {
+      "id": "famine",
+      "at": 5,
+      "seasons": 4,
+      "kind": "famine",
+      "severity": 3,
+      "headline": "The harvest fails. There will not be enough.",
+      "text": "Year 3. The rain came at the wrong time.",
+      "fx": "rain"
+    },
+    {
+      "id": "winter1",
+      "at": 12,
+      "seasons": 1,
+      "kind": "winter",
+      "severity": 2,
+      "headline": "The hardest winter in memory.",
+      "text": "The river freezes to the bed.",
+      "fx": "snow"
+    },
+    {
+      "id": "plague",
+      "at": 19,
+      "seasons": 5,
+      "kind": "plague",
+      "severity": 2,
+      "headline": "The sickness comes up the lane.",
+      "text": "Year 6. It starts at the far end.",
+      "fx": "fog"
+    },
+    {
+      "id": "boom",
+      "at": 29,
+      "seasons": 6,
+      "kind": "boom",
+      "severity": 1,
+      "headline": "A new seam. The pit takes on anyone who can hold a pick.",
+      "text": "Year 9.",
+      "fx": "aurora"
+    },
+    {
+      "id": "war",
+      "at": 39,
+      "seasons": 6,
+      "kind": "war",
+      "severity": 3,
+      "headline": "The war reaches the town. Soldiers in the square.",
+      "text": "Year 11.",
+      "fx": "storm"
+    },
+    {
+      "id": "fire",
+      "at": 50,
+      "seasons": 1,
+      "kind": "fire",
+      "severity": 2,
+      "headline": "Fire on the lane.",
+      "text": "Year 13. It starts in a chimney.",
+      "fx": "fire"
+    },
+    {
+      "id": "winter2",
+      "at": 56,
+      "seasons": 1,
+      "kind": "winter",
+      "severity": 3,
+      "headline": "The winter of the black frost.",
+      "text": "Year 14.",
+      "fx": "snow"
+    }
+  ],
+  "citizens": [
+    {
+      "id": "ivo",
+      "name": "Ivo Brand",
+      "age": 34,
+      "role": "miner",
+      "want": "to be the one people can count on",
+      "fear": "letting someone down",
+      "traits": {
+        "sociable": 0.6,
+        "bold": 0.45,
+        "loyal": 0.95,
+        "restless": 0.15
+      },
+      "home": "lane",
+      "job": "miner",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "saskia",
+          "affinity": 0.2,
+          "why": "grew up on the same lane"
+        },
+        {
+          "to": "teo",
+          "affinity": 0.3,
+          "why": "work the same shift"
+        }
+      ]
+    },
+    {
+      "id": "saskia",
+      "name": "Saskia Reyk",
+      "age": 27,
+      "role": "shopkeeper",
+      "want": "to be somebody in this town",
+      "fear": "being nothing",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.95,
+        "loyal": 0.3,
+        "restless": 0.75
+      },
+      "home": "lane",
+      "job": "shop",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "ivo",
+          "affinity": 0.2,
+          "why": "grew up on the same lane"
+        },
+        {
+          "to": "mara",
+          "affinity": -0.2,
+          "why": "an old slight"
+        }
+      ]
+    },
+    {
+      "id": "teo",
+      "name": "Teo Aske",
+      "age": 51,
+      "role": "pit clerk",
+      "want": "to keep what he has",
+      "fear": "the workhouse",
+      "traits": {
+        "sociable": 0.2,
+        "bold": 0.1,
+        "loyal": 0.5,
+        "restless": 0.1
+      },
+      "home": "lane",
+      "job": "clerk",
+      "partner": null,
+      "children": 2,
+      "ties": [
+        {
+          "to": "ivo",
+          "affinity": 0.3,
+          "why": "work the same shift"
+        }
+      ]
+    },
+    {
+      "id": "mara",
+      "name": "Mara Holm",
+      "age": 30,
+      "role": "farmhand",
+      "want": "to be loved by someone",
+      "fear": "being alone",
+      "traits": {
+        "sociable": 0.95,
+        "bold": 0.5,
+        "loyal": 0.65,
+        "restless": 0.5
+      },
+      "home": "lane",
+      "job": "farmhand",
+      "partner": null,
+      "children": 1,
+      "ties": [
+        {
+          "to": "saskia",
+          "affinity": -0.2,
+          "why": "an old slight"
+        },
+        {
+          "to": "teo",
+          "affinity": 0.1,
+          "why": "neighbours"
+        }
+      ]
+    }
+  ],
+  "fill": {
+    "count": 6,
+    "wants": [
+      "to keep what they have",
+      "to be left alone",
+      "to see their children grow",
+      "to get out of this town"
+    ],
+    "fears": [
+      "the winter",
+      "being alone",
+      "the workhouse",
+      "being talked about"
+    ]
+  },
+  "dilemmas": [
+    {
+      "id": "deep-seam",
+      "when": [
+        "job:miner"
+      ],
+      "weight": 1.4,
+      "target": "friend",
+      "text": "The foreman offers double pay for the deep seam. {{target}} says the props are rotten.",
+      "options": [
+        {
+          "id": "go",
+          "label": "Take the double pay",
+          "pull": {
+            "bold": 0.5,
+            "poverty": 0.5,
+            "danger": -0.4
+          },
+          "evening": "work",
+          "outcomes": [
+            {
+              "chance": 0.75,
+              "text": "the seam pays; you come up black and rich",
+              "self": {
+                "money": 0.22,
+                "mood": 0.05
+              }
+            },
+            {
+              "chance": 0.25,
+              "text": "the props give; you are dug out half-dead",
+              "self": {
+                "health": -0.4,
+                "money": 0.1
+              },
+              "deed": {
+                "kind": "sacrifice",
+                "help": 0.1,
+                "text": "was dug out of the deep seam half-dead"
+              }
+            }
+          ]
+        },
+        {
+          "id": "refuse",
+          "label": "Refuse, and say why",
+          "pull": {
+            "loyal": 0.3,
+            "danger": 0.5
+          },
+          "evening": "home",
+          "outcomes": [
+            {
+              "chance": 0.7,
+              "text": "the foreman remembers your name",
+              "self": {
+                "money": -0.03
+              },
+              "target": {
+                "tie": 0.3
+              },
+              "deed": {
+                "kind": "loyalty",
+                "help": 0.2,
+                "text": "backed {{target}} against the foreman"
+              }
+            },
+            {
+              "chance": 0.3,
+              "text": "the foreman finds someone hungrier",
+              "self": {
+                "mood": -0.05
+              },
+              "target": {
+                "tie": 0.2
+              }
+            }
+          ]
+        },
+        {
+          "id": "send",
+          "label": "Say nothing; let {{target}} take it",
+          "pull": {
+            "loyal": -0.5,
+            "poverty": 0.2
+          },
+          "evening": "tavern",
+          "outcomes": [
+            {
+              "chance": 0.6,
+              "text": "{{target}} comes up rich and never knows",
+              "self": {},
+              "target": {
+                "money": 0.15,
+                "tie": 0.05
+              }
+            },
+            {
+              "chance": 0.4,
+              "text": "the props give on {{target}}",
+              "self": {
+                "mood": -0.1
+              },
+              "target": {
+                "health": -0.4,
+                "tie": -0.3
+              },
+              "deed": {
+                "kind": "betrayal",
+                "harm": 0.5,
+                "text": "let {{target}} take the rotten seam"
+              }
+            }
+          ]
+        }
+      ],
+      "texts": [
+        "The foreman offers double pay for the deep seam. {{target}} says the props are rotten.",
+        "Double pay for whoever works the deep seam this {{season}}. {{target}} has seen the props."
+      ]
+    },
+    {
+      "id": "ledger",
+      "when": [
+        "rich"
+      ],
+      "weight": 1.2,
+      "target": "poorer",
+      "text": "{{target}} is behind on what they owe you. Everyone on the lane knows it.",
+      "options": [
+        {
+          "id": "press",
+          "label": "Press for it, in front of the lane",
+          "pull": {
+            "bold": 0.4,
+            "loyal": -0.5,
+            "poverty": 0.3
+          },
+          "evening": "visit",
+          "outcomes": [
+            {
+              "chance": 0.7,
+              "text": "they pay, and the lane watches",
+              "self": {
+                "money": 0.12
+              },
+              "target": {
+                "money": -0.12,
+                "tie": -0.4
+              },
+              "deed": {
+                "kind": "justice",
+                "harm": 0.3,
+                "text": "shamed {{target}} for a debt in front of the lane"
+              }
+            },
+            {
+              "chance": 0.3,
+              "text": "they cannot pay; you take the tools",
+              "self": {
+                "money": 0.06
+              },
+              "target": {
+                "money": -0.06,
+                "job": null,
+                "tie": -0.7
+              },
+              "deed": {
+                "kind": "betrayal",
+                "harm": 0.6,
+                "text": "took {{target}}'s tools for a debt"
+              }
+            }
+          ]
+        },
+        {
+          "id": "quiet",
+          "label": "Have a quiet word",
+          "pull": {
+            "loyal": 0.3,
+            "sociable": 0.3
+          },
+          "evening": "visit",
+          "outcomes": [
+            {
+              "chance": 1,
+              "text": "they pay half and remember the kindness",
+              "self": {
+                "money": 0.05
+              },
+              "target": {
+                "money": -0.05,
+                "tie": 0.2
+              },
+              "deed": {
+                "kind": "mercy",
+                "help": 0.2,
+                "text": "let {{target}} pay half"
+              }
+            }
+          ]
+        },
+        {
+          "id": "forget",
+          "label": "Let it go",
+          "pull": {
+            "loyal": 0.5,
+            "poverty": -0.4
+          },
+          "evening": "home",
+          "outcomes": [
+            {
+              "chance": 1,
+              "text": "they never forget it",
+              "self": {},
+              "target": {
+                "tie": 0.4
+              },
+              "deed": {
+                "kind": "gift",
+                "help": 0.3,
+                "text": "forgave {{target}}'s debt"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

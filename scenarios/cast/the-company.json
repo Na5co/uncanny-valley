@@ -1,0 +1,708 @@
+{
+  "id": "the-company",
+  "note": "The company: the 25 characters the runs draw from. Four take part in any one run, in whichever world is running; anyone may come back, always with the same face. Each has one trait that marks them out (trait), which they carry into every decision, and four numbers 0-1 (sociable, bold, loyal, restless) that the simulation weighs. Keep them far apart — the point of the company is that the same pressure meets different people. Each is a man or a woman (sex: m or f), and the story says he or she.",
+  "cast": [
+    {
+      "id": "ivo",
+      "name": "Ivo Brand",
+      "age": 34,
+      "role": "miner",
+      "want": "to be the one people can count on",
+      "fear": "letting someone down",
+      "traits": {
+        "sociable": 0.6,
+        "bold": 0.45,
+        "loyal": 0.95,
+        "restless": 0.15
+      },
+      "home": "lane",
+      "job": "miner",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "saskia",
+          "affinity": 0.2,
+          "why": "grew up on the same lane"
+        },
+        {
+          "to": "teo",
+          "affinity": 0.3,
+          "why": "work the same shift"
+        }
+      ],
+      "trait": {
+        "name": "Keeps every promise",
+        "text": "Once Ivo gives his word he keeps it, even when it costs him or the promise was a foolish one."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "saskia",
+      "name": "Saskia Reyk",
+      "age": 27,
+      "role": "shopkeeper",
+      "want": "to be somebody in this town",
+      "fear": "being nothing",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.95,
+        "loyal": 0.3,
+        "restless": 0.75
+      },
+      "home": "lane",
+      "job": "shop",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "ivo",
+          "affinity": 0.2,
+          "why": "grew up on the same lane"
+        },
+        {
+          "to": "mara",
+          "affinity": -0.2,
+          "why": "an old slight"
+        }
+      ],
+      "trait": {
+        "name": "Ambitious",
+        "text": "Saskia weighs every choice by what it does for her standing in town."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "teo",
+      "name": "Teo Aske",
+      "age": 51,
+      "role": "pit clerk",
+      "want": "to keep what he has",
+      "fear": "ending up with nothing",
+      "traits": {
+        "sociable": 0.2,
+        "bold": 0.1,
+        "loyal": 0.5,
+        "restless": 0.1
+      },
+      "home": "lane",
+      "job": "clerk",
+      "partner": null,
+      "children": 2,
+      "ties": [
+        {
+          "to": "ivo",
+          "affinity": 0.3,
+          "why": "work the same shift"
+        }
+      ],
+      "trait": {
+        "name": "Cautious",
+        "text": "Teo would rather miss a chance than take a risk, and he will wait until it is too late."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "mara",
+      "name": "Mara Holm",
+      "age": 30,
+      "role": "farmhand",
+      "want": "to be loved by someone",
+      "fear": "being alone",
+      "traits": {
+        "sociable": 0.95,
+        "bold": 0.5,
+        "loyal": 0.65,
+        "restless": 0.5
+      },
+      "home": "lane",
+      "job": "farmhand",
+      "partner": null,
+      "children": 1,
+      "ties": [
+        {
+          "to": "saskia",
+          "affinity": -0.2,
+          "why": "an old slight"
+        },
+        {
+          "to": "teo",
+          "affinity": 0.1,
+          "why": "neighbours"
+        }
+      ],
+      "trait": {
+        "name": "Needs to be liked",
+        "text": "Mara will go along with almost anything to keep people warm towards her."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "juno",
+      "name": "Juno Vale",
+      "age": 41,
+      "role": "midwife",
+      "want": "to be owed nothing and owe nothing",
+      "fear": "being in anyone's debt",
+      "traits": {
+        "sociable": 0.35,
+        "bold": 0.55,
+        "loyal": 0.75,
+        "restless": 0.2
+      },
+      "home": "lane",
+      "job": "shop",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "teo",
+          "affinity": 0.25,
+          "why": "she saw his children born"
+        }
+      ],
+      "trait": {
+        "name": "Proud",
+        "text": "Juno will not take charity or ask for help, not even to stay alive."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "rune",
+      "name": "Rune Kask",
+      "age": 23,
+      "role": "pit boy",
+      "want": "to be taken seriously by the older ones",
+      "fear": "being laughed at",
+      "traits": {
+        "sociable": 0.7,
+        "bold": 0.8,
+        "loyal": 0.35,
+        "restless": 0.9
+      },
+      "home": "lane",
+      "job": "miner",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "ivo",
+          "affinity": 0.4,
+          "why": "Ivo taught him the seam"
+        }
+      ],
+      "trait": {
+        "name": "Hot-headed",
+        "text": "Rune acts first and thinks after, and a slight is never let go."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "hedda",
+      "name": "Hedda Lun",
+      "age": 58,
+      "role": "publican",
+      "want": "to keep her place going one more year",
+      "fear": "the people she owes",
+      "traits": {
+        "sociable": 0.85,
+        "bold": 0.6,
+        "loyal": 0.45,
+        "restless": 0.25
+      },
+      "home": "square",
+      "job": "shop",
+      "partner": null,
+      "children": 3,
+      "ties": [
+        {
+          "to": "saskia",
+          "affinity": 0.3,
+          "why": "they buy and sell to each other"
+        }
+      ],
+      "trait": {
+        "name": "Generous to a fault",
+        "text": "Hedda gives on credit she cannot afford and cannot say no to a hungry face."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "cato",
+      "name": "Cato Sarn",
+      "age": 36,
+      "role": "preacher",
+      "want": "to be right in front of God",
+      "fear": "being a hypocrite",
+      "traits": {
+        "sociable": 0.55,
+        "bold": 0.35,
+        "loyal": 0.85,
+        "restless": 0.15
+      },
+      "home": "chapel",
+      "job": "clerk",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "mara",
+          "affinity": 0.2,
+          "why": "she comes on Sundays"
+        }
+      ],
+      "trait": {
+        "name": "Devout",
+        "text": "Cato asks what God would want before he asks what is sensible."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "sif",
+      "name": "Sif Aalto",
+      "age": 29,
+      "role": "carter",
+      "want": "to see somewhere that is not here",
+      "fear": "dying in this place",
+      "traits": {
+        "sociable": 0.3,
+        "bold": 0.85,
+        "loyal": 0.25,
+        "restless": 0.95
+      },
+      "home": "field",
+      "job": "farmhand",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "rune",
+          "affinity": 0.3,
+          "why": "they talk about leaving"
+        }
+      ],
+      "trait": {
+        "name": "Wanderer",
+        "text": "Sif is always half out of the door, and ties to people feel like chains."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "lena",
+      "name": "Lena Orre",
+      "age": 45,
+      "role": "schoolmistress",
+      "want": "the children to get out",
+      "fear": "that none of them will",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.4,
+        "loyal": 0.9,
+        "restless": 0.3
+      },
+      "home": "lane",
+      "job": "clerk",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "hedda",
+          "affinity": 0.2,
+          "why": "she taught Hedda's three"
+        }
+      ],
+      "trait": {
+        "name": "Protects the young",
+        "text": "Lena puts children first, anyone's children, above herself and above the rules."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "bram",
+      "name": "Bram Ost",
+      "age": 62,
+      "role": "smith",
+      "want": "to hand his trade on",
+      "fear": "outliving his usefulness",
+      "traits": {
+        "sociable": 0.25,
+        "bold": 0.5,
+        "loyal": 0.7,
+        "restless": 0.05
+      },
+      "home": "lane",
+      "job": "miner",
+      "partner": null,
+      "children": 2,
+      "ties": [
+        {
+          "to": "bea",
+          "affinity": -0.35,
+          "why": "an unpaid account"
+        }
+      ],
+      "trait": {
+        "name": "Stubborn",
+        "text": "Once Bram has decided something, nothing and nobody will move him."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "bea",
+      "name": "Bea Hallow",
+      "age": 33,
+      "role": "moneylender",
+      "want": "to never be poor again",
+      "fear": "going back to what she came from",
+      "traits": {
+        "sociable": 0.45,
+        "bold": 0.7,
+        "loyal": 0.2,
+        "restless": 0.4
+      },
+      "home": "square",
+      "job": "shop",
+      "partner": null,
+      "children": 1,
+      "ties": [
+        {
+          "to": "bram",
+          "affinity": -0.35,
+          "why": "an unpaid account"
+        }
+      ],
+      "trait": {
+        "name": "Calculating",
+        "text": "Bea counts what everything costs and what everyone owes, and she collects."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "otto",
+      "name": "Otto Venn",
+      "age": 47,
+      "role": "constable",
+      "want": "this place to hold together",
+      "fear": "the day it does not",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.75,
+        "loyal": 0.6,
+        "restless": 0.2
+      },
+      "home": "square",
+      "job": "clerk",
+      "partner": null,
+      "children": 1,
+      "ties": [
+        {
+          "to": "cato",
+          "affinity": 0.15,
+          "why": "they keep the peace between them"
+        }
+      ],
+      "trait": {
+        "name": "Believes in order",
+        "text": "Otto thinks the rules hold a town together, and he enforces them even on friends."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "nell",
+      "name": "Nell Ward",
+      "age": 19,
+      "role": "kitchen girl",
+      "want": "to be let in on things",
+      "fear": "being sent back to where she came from",
+      "traits": {
+        "sociable": 0.9,
+        "bold": 0.25,
+        "loyal": 0.55,
+        "restless": 0.6
+      },
+      "home": "square",
+      "job": "shop",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "hedda",
+          "affinity": 0.4,
+          "why": "Hedda took her in"
+        }
+      ],
+      "trait": {
+        "name": "Gossip",
+        "text": "Nell cannot keep a secret; what she sees, the town knows by nightfall."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "gil",
+      "name": "Gil Mosk",
+      "age": 38,
+      "role": "poacher",
+      "want": "to answer to nobody",
+      "fear": "a cell",
+      "traits": {
+        "sociable": 0.15,
+        "bold": 0.9,
+        "loyal": 0.3,
+        "restless": 0.8
+      },
+      "home": "field",
+      "job": "farmhand",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "otto",
+          "affinity": -0.4,
+          "why": "the constable has had him in once"
+        }
+      ],
+      "trait": {
+        "name": "Defies authority",
+        "text": "Gil does the opposite of whatever he is ordered to do, on principle."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "vera",
+      "name": "Vera Sund",
+      "age": 26,
+      "role": "nurse",
+      "want": "to do no harm in a place that does plenty",
+      "fear": "getting used to it",
+      "traits": {
+        "sociable": 0.6,
+        "bold": 0.3,
+        "loyal": 0.85,
+        "restless": 0.35
+      },
+      "home": "lane",
+      "job": "clerk",
+      "partner": null,
+      "children": 0,
+      "ties": [
+        {
+          "to": "lena",
+          "affinity": 0.3,
+          "why": "they sat with the same dying"
+        }
+      ],
+      "trait": {
+        "name": "Compassionate",
+        "text": "Vera cannot walk past someone suffering, whatever it costs her."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "pell",
+      "name": "Pell Garrow",
+      "age": 44,
+      "role": "ferryman",
+      "want": "to come out ahead",
+      "fear": "being found out",
+      "traits": {
+        "sociable": 0.7,
+        "bold": 0.6,
+        "loyal": 0.2,
+        "restless": 0.5
+      },
+      "home": "lane",
+      "job": "shop",
+      "partner": null,
+      "children": 0,
+      "trait": {
+        "name": "Liar",
+        "text": "Pell lies easily, even when the truth would do just as well."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "ada",
+      "name": "Ada Quill",
+      "age": 36,
+      "role": "laundress",
+      "want": "to see wrongs paid back",
+      "fear": "being made a fool of",
+      "traits": {
+        "sociable": 0.35,
+        "bold": 0.65,
+        "loyal": 0.6,
+        "restless": 0.3
+      },
+      "home": "lane",
+      "job": "farmhand",
+      "partner": null,
+      "children": 0,
+      "trait": {
+        "name": "Vengeful",
+        "text": "Ada never forgets a wrong, and she waits for her chance to repay it."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "mikkel",
+      "name": "Mikkel Thorn",
+      "age": 55,
+      "role": "cooper",
+      "want": "a quiet life",
+      "fear": "a fight he cannot walk away from",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.05,
+        "loyal": 0.5,
+        "restless": 0.15
+      },
+      "home": "lane",
+      "job": "miner",
+      "partner": null,
+      "children": 0,
+      "trait": {
+        "name": "Coward",
+        "text": "Mikkel backs away from every confrontation, even when someone needs him to stand."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "ines",
+      "name": "Ines Carrow",
+      "age": 24,
+      "role": "seamstress",
+      "want": "what other people have",
+      "fear": "being passed over",
+      "traits": {
+        "sociable": 0.6,
+        "bold": 0.55,
+        "loyal": 0.3,
+        "restless": 0.7
+      },
+      "home": "square",
+      "job": "shop",
+      "partner": null,
+      "children": 0,
+      "trait": {
+        "name": "Jealous",
+        "text": "Ines cannot bear to see someone else get what she wanted."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "tobin",
+      "name": "Tobin Ashe",
+      "age": 30,
+      "role": "drover",
+      "want": "one big win",
+      "fear": "dying ordinary",
+      "traits": {
+        "sociable": 0.75,
+        "bold": 0.9,
+        "loyal": 0.4,
+        "restless": 0.85
+      },
+      "home": "field",
+      "job": "farmhand",
+      "partner": null,
+      "children": 0,
+      "trait": {
+        "name": "Gambler",
+        "text": "Tobin will stake everything he has on a chance at more."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "ruth",
+      "name": "Ruth Penhale",
+      "age": 67,
+      "role": "herbwife",
+      "want": "to see things through calmly",
+      "fear": "nothing she will admit to",
+      "traits": {
+        "sociable": 0.45,
+        "bold": 0.3,
+        "loyal": 0.7,
+        "restless": 0.05
+      },
+      "home": "field",
+      "job": "clerk",
+      "partner": null,
+      "children": 0,
+      "trait": {
+        "name": "Fatalist",
+        "text": "Ruth believes what comes was meant to, and rarely fights it."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "aksel",
+      "name": "Aksel Varn",
+      "age": 40,
+      "role": "bargeman",
+      "want": "to need nobody",
+      "fear": "being betrayed again",
+      "traits": {
+        "sociable": 0.1,
+        "bold": 0.5,
+        "loyal": 0.35,
+        "restless": 0.4
+      },
+      "home": "lane",
+      "job": "miner",
+      "partner": null,
+      "children": 0,
+      "trait": {
+        "name": "Suspicious",
+        "text": "Aksel trusts no one, and reads every kindness as a trick."
+      },
+      "sex": "m"
+    },
+    {
+      "id": "wilma",
+      "name": "Wilma Rook",
+      "age": 49,
+      "role": "baker",
+      "want": "everyone fed",
+      "fear": "being useless",
+      "traits": {
+        "sociable": 0.65,
+        "bold": 0.35,
+        "loyal": 0.95,
+        "restless": 0.1
+      },
+      "home": "square",
+      "job": "shop",
+      "partner": null,
+      "children": 0,
+      "trait": {
+        "name": "Self-sacrificing",
+        "text": "Wilma gives away her own share first and goes without."
+      },
+      "sex": "f"
+    },
+    {
+      "id": "jory",
+      "name": "Jory Fen",
+      "age": 17,
+      "role": "errand boy",
+      "want": "to have something of his own",
+      "fear": "going hungry again",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.75,
+        "loyal": 0.25,
+        "restless": 0.9
+      },
+      "home": "lane",
+      "job": "farmhand",
+      "partner": null,
+      "children": 0,
+      "trait": {
+        "name": "Opportunist",
+        "text": "Jory takes whatever is left unguarded and thinks about it afterwards."
+      },
+      "sex": "m"
+    }
+  ]
+}

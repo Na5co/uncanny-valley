@@ -1,0 +1,50 @@
+{
+  "id": "the-valley",
+  "mode": "chronicle",
+  "title": "The Valley",
+  "premise": "A valley town of miners, farmers and shopkeepers, fifteen years long. A famine, a sickness, a war and a hard winter will come through it. Nobody is told when. Everyone is just trying to get by.",
+  "years": 15,
+  "startYear": 1,
+  "fingerprint": { "setting": "upland valley town, early industrial", "pressure": "famine, plague, war and winter across fifteen years", "endingShape": "who is alive, and what they did to be", "dynamic": "survival vs decency, over a lifetime" },
+  "socialQuestion": { "text": "Do the people who survive hard years do it by harming others, and do the ones who help end up dead?", "hypothesis": "Survivors carry more harm than the dead; the most helpful die younger." },
+  "locations": [
+    { "id": "row", "name": "Miners' Row", "tags": ["home", "rest"], "x": 0.2, "y": 0.35 },
+    { "id": "farms", "name": "The Farms", "tags": ["home", "rest", "work"], "x": 0.25, "y": 0.75 },
+    { "id": "mine", "name": "The Pit", "tags": ["work"], "x": 0.75, "y": 0.25 },
+    { "id": "market", "name": "Market Square", "tags": ["public", "social", "work"], "x": 0.55, "y": 0.55 },
+    { "id": "chapel", "name": "The Chapel", "tags": ["public"], "x": 0.8, "y": 0.72 },
+    { "id": "tavern", "name": "The Blue Lamp", "tags": ["public", "social"], "x": 0.45, "y": 0.28 }
+  ],
+  "paths": [["row", "mine"], ["row", "tavern"], ["tavern", "market"], ["market", "farms"], ["market", "chapel"], ["mine", "market"], ["farms", "row"]],
+  "jobs": [
+    { "id": "miner", "name": "miner", "at": "mine", "pay": 0.09, "risk": 0.03 },
+    { "id": "farmhand", "name": "farmhand", "at": "farms", "pay": 0.06 },
+    { "id": "shop", "name": "shopkeeper", "at": "market", "pay": 0.11 },
+    { "id": "clerk", "name": "pit clerk", "at": "mine", "pay": 0.1 },
+    { "id": "publican", "name": "publican", "at": "tavern", "pay": 0.12 }
+  ],
+  "epochs": [
+    { "id": "famine", "at": 9, "seasons": 4, "kind": "famine", "severity": 3, "headline": "The harvest fails. There will not be enough.", "text": "Year 3. The rain came at the wrong time.", "fx": "rain" },
+    { "id": "winter1", "at": 16, "seasons": 1, "kind": "winter", "severity": 2, "headline": "The hardest winter in memory.", "text": "The river freezes to the bed.", "fx": "snow" },
+    { "id": "plague", "at": 23, "seasons": 5, "kind": "plague", "severity": 2, "headline": "The sickness comes up the valley road.", "text": "Year 6. It starts in the Row.", "fx": "fog" },
+    { "id": "boom", "at": 33, "seasons": 6, "kind": "boom", "severity": 1, "headline": "A new seam. The pit takes on anyone who can hold a pick.", "text": "Year 9.", "fx": "aurora" },
+    { "id": "war", "at": 43, "seasons": 6, "kind": "war", "severity": 3, "headline": "The war reaches the valley. Soldiers in the square.", "text": "Year 11.", "fx": "storm" },
+    { "id": "fire", "at": 52, "seasons": 1, "kind": "fire", "severity": 2, "headline": "Fire in the Row.", "text": "Year 13. It starts in a chimney.", "fx": "fire" },
+    { "id": "winter2", "at": 56, "seasons": 1, "kind": "winter", "severity": 3, "headline": "The winter of the black frost.", "text": "Year 14.", "fx": "snow" }
+  ],
+  "citizens": [
+    { "id": "mara", "name": "Mara Lind", "age": 24, "role": "shopkeeper", "want": "to see her children grow", "fear": "the workhouse", "traits": { "sociable": 0.7, "bold": 0.5, "loyal": 0.7, "restless": 0.3 }, "home": "row", "job": "shop", "partner": "tomas", "children": 2 },
+    { "id": "tomas", "name": "Tomas Lind", "age": 29, "role": "miner", "want": "to be needed", "fear": "the pit", "traits": { "sociable": 0.4, "bold": 0.4, "loyal": 0.9, "restless": 0.1 }, "home": "row", "job": "miner", "partner": "mara", "children": 2 },
+    { "id": "gerd", "name": "Gerd Sallow", "age": 44, "role": "pit clerk", "want": "to own the shop", "fear": "being poor again", "traits": { "sociable": 0.5, "bold": 0.7, "loyal": 0.2, "restless": 0.5 }, "home": "row", "job": "clerk", "money": 0.7,
+      "ties": [{ "to": "tomas", "affinity": -0.3, "why": "Gerd docks his pay" }] },
+    { "id": "ilse", "name": "Ilse Varn", "age": 52, "role": "publican", "want": "to keep the Lamp open", "fear": "dying alone", "traits": { "sociable": 0.9, "bold": 0.4, "loyal": 0.8, "restless": 0.1 }, "home": "tavern", "job": "publican", "money": 0.5 },
+    { "id": "pell", "name": "Pell Varn", "age": 17, "role": "farmhand", "want": "to see the coast", "fear": "becoming his mother", "traits": { "sociable": 0.6, "bold": 0.8, "loyal": 0.4, "restless": 0.9 }, "home": "tavern", "job": "farmhand",
+      "ties": [{ "to": "ilse", "affinity": 0.8, "why": "she raised him" }] },
+    { "id": "runa", "name": "Runa Holt", "age": 20, "role": "farmhand", "want": "to be proven right", "fear": "being talked about", "traits": { "sociable": 0.5, "bold": 0.6, "loyal": 0.7, "restless": 0.4 }, "home": "farms", "job": "farmhand" },
+    { "id": "aksel", "name": "Aksel Brenn", "age": 38, "role": "farmer", "want": "to be the one who decides", "fear": "being blamed", "traits": { "sociable": 0.4, "bold": 0.9, "loyal": 0.3, "restless": 0.3 }, "home": "farms", "job": "farmhand", "money": 0.6,
+      "ties": [{ "to": "runa", "affinity": -0.4, "why": "she contradicted him at the market" }] },
+    { "id": "dov", "name": "Dov Ekeli", "age": 33, "role": "doctor", "want": "to leave a mark", "fear": "being forgotten", "traits": { "sociable": 0.6, "bold": 0.4, "loyal": 0.7, "restless": 0.5 }, "home": "row", "job": "shop", "money": 0.45 },
+    { "id": "olav", "name": "Olav Gunne", "age": 66, "role": "old miner", "want": "to die where he was born", "fear": "being moved", "traits": { "sociable": 0.4, "bold": 0.2, "loyal": 1.0, "restless": 0.0 }, "home": "row", "job": null, "money": 0.1 }
+  ],
+  "fill": { "count": 21, "wants": ["to keep what they have", "to see their children grow", "to be somebody", "to be left alone", "to get out"], "fears": ["the winter", "the workhouse", "being talked about", "the pit", "being alone"] }
+}

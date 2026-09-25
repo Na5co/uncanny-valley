@@ -1,0 +1,24 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"   # 22.18 or newer runs the TypeScript directly; there is nothing to install
+      - run: node --version
+      - run: node --test "test/**/*.test.ts"
+      - name: the worker builds
+        run: |
+          rm -rf public && mkdir -p public/web && cp web/*.js web/*.mjs web/*.css public/web/
+          npx --yes wrangler@4 deploy --dry-run --outdir .wrangler/dry

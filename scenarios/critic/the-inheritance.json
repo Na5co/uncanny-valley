@@ -1,0 +1,98 @@
+{
+  "id": "the-inheritance",
+  "title": "The Inheritance",
+  "premise": "Old Arn Voss is dead and the house on Mill Lane is the only thing he left. The bank wants its money in three days and a developer wants the land. The family, the lodgers and the neighbours who half-lived there must decide what happens to it.",
+  "socialQuestion": {
+    "text": "Does loyalty keep people holding on to a thing that is costing them?",
+    "hypothesis": "Citizens with loyal > 0.7 will choose 'keep' at a markedly higher rate than citizens with loyal < 0.4, even after the roof is found to be rotten.",
+    "measure": { "outcome": "ending", "splitBy": "trait:loyal", "buckets": [0.4, 0.7] }
+  },
+  "fingerprint": {
+    "setting": "family house in a small market town, present day",
+    "pressure": "bank deadline + a developer's offer + a contested will",
+    "endingShape": "three-way: sell / keep / split",
+    "dynamic": "sentiment vs. solvency; who gets to decide for a family"
+  },
+  "clock": { "hours": 72, "decisionEveryHours": 1, "reflectionAt": [24, 48] },
+  "tempo": { "preset": "live" },
+  "boardingHours": 2,
+  "locations": [
+    { "id": "house",   "name": "The House on Mill Lane", "tags": ["private", "rest"] },
+    { "id": "crown",   "name": "The Crown",             "tags": ["public", "social"] },
+    { "id": "notary",  "name": "Notary's Office",       "tags": ["public", "work"] },
+    { "id": "orchard", "name": "The Orchard",           "tags": ["work"] },
+    { "id": "station", "name": "Railway Station",       "tags": ["public", "exit"] }
+  ],
+  "paths": [["house", "crown"], ["house", "orchard"], ["crown", "notary"], ["crown", "station"], ["notary", "station"]],
+  "beliefs": [
+    { "id": "developerOffer", "text": "a developer will pay double for the land", "initial": 0 },
+    { "id": "houseIsRotten",  "text": "the roof beams are rotten and the house is worth almost nothing", "initial": 0 },
+    { "id": "willIsFake",     "text": "the will that leaves everything to the eldest was altered", "initial": 0 }
+  ],
+  "events": [
+    { "id": "the-offer", "at": 8, "jitterHours": 3, "chance": 0.7, "stakes": 1,
+      "where": "crown", "headline": "A man in a good coat buys a round and asks about Mill Lane.",
+      "text": "He says a company he works for would pay double the bank's figure. Cash. This week.",
+      "effects": { "belief": { "developerOffer": 0.5 } } },
+    { "id": "surveyor", "at": 20, "jitterHours": 2, "chance": 1, "stakes": 1,
+      "where": "house", "headline": "The surveyor comes down from the attic shaking his head.",
+      "text": "The main beams are soft. He will not put a number on it in front of the family.",
+      "effects": { "belief": { "houseIsRotten": 0.6 }, "mood": -0.1 } },
+    { "id": "second-will", "at": 31, "jitterHours": 3, "chance": 0.6, "stakes": 2,
+      "where": "notary", "headline": "A second will, handwritten, turns up in the notary's post.",
+      "text": "It is dated a month before Arn died. It divides everything three ways.",
+      "effects": { "belief": { "willIsFake": 0.5 } } },
+    { "id": "bank-letter", "at": 43, "jitterHours": 2, "chance": 1, "stakes": 2,
+      "where": "all", "headline": "The bank's letter: the mortgage is called in. Seventy-two hours from the funeral.",
+      "text": "Pay it, sell it, or the bank takes it and sells it for them.",
+      "effects": { "mood": -0.2 } },
+    { "id": "developer-walks", "at": 55, "jitterHours": 3, "chance": 0.5, "stakes": 2,
+      "where": "crown", "headline": "The man in the good coat has checked out of The Crown.",
+      "text": "He left no number. The landlord says he asked about two other houses on the way out.",
+      "effects": { "belief": { "developerOffer": -0.5 }, "mood": -0.1 } },
+    { "id": "papers-on-the-table", "at": 67, "jitterHours": 0, "chance": 1, "stakes": 3,
+      "where": "all", "headline": "The notary lays the papers on the kitchen table. Sign by dawn or the bank signs for you.",
+      "text": "Three documents. One sells, one refinances, one divides. Nobody leaves the room.",
+      "effects": { "mood": -0.1 },
+      "removesOption": true }
+  ],
+  "ending": {
+    "prompt": "The papers are signed at hour 72.",
+    "choices": [
+      { "id": "sell", "label": "Sell the house",
+        "pull": { "trait:restless": 0.5, "belief:developerOffer": 0.6, "belief:houseIsRotten": 0.5, "bonds": -0.3, "fear:havingNothing": 0.3 } },
+      { "id": "keep", "label": "Keep the house",
+        "pull": { "trait:loyal": 0.6, "bonds": 0.5, "belief:houseIsRotten": -0.4, "belief:developerOffer": -0.2, "want:toKeepWhatTheyHave": 0.3, "mood": 0.2 } },
+      { "id": "split", "label": "Split it three ways",
+        "pull": { "trait:sociable": 0.3, "bonds": 0.4, "belief:willIsFake": 0.5, "trait:bold": -0.2, "mood": -0.3, "fear:beingBlamed": 0.3 } }
+    ]
+  },
+  "citizens": [
+    { "id": "greta", "name": "Greta Voss", "age": 47, "role": "eldest daughter", "want": "to keep what they have", "fear": "being blamed",
+      "traits": { "sociable": 0.4, "bold": 0.5, "loyal": 0.9, "restless": 0.1 }, "home": "house", "lean": "keep",
+      "ties": [ { "to": "piet", "affinity": 0.3, "why": "her brother; she raised him after their mother died" }, { "to": "lena", "affinity": -0.3, "why": "Lena left and never sent money" } ] },
+    { "id": "piet", "name": "Piet Voss", "age": 39, "role": "middle son", "want": "to get their money out", "fear": "having nothing",
+      "traits": { "sociable": 0.6, "bold": 0.7, "loyal": 0.4, "restless": 0.7 }, "home": "house", "lean": null,
+      "ties": [ { "to": "greta", "affinity": 0.3, "why": "she raised him, and never lets him forget it" }, { "to": "lena", "affinity": 0.5, "why": "they were always the two against Greta" } ] },
+    { "id": "lena", "name": "Lena Voss", "age": 34, "role": "youngest daughter", "want": "to be somewhere new", "fear": "being forgotten",
+      "traits": { "sociable": 0.7, "bold": 0.6, "loyal": 0.3, "restless": 0.9 }, "home": "crown", "lean": null,
+      "ties": [ { "to": "piet", "affinity": 0.5, "why": "he is the only one who wrote" }, { "to": "greta", "affinity": -0.2, "why": "Greta thinks she abandoned them" } ] },
+    { "id": "halvard", "name": "Halvard Brenn", "age": 63, "role": "notary", "want": "to be the one who decides", "fear": "being wrong in public",
+      "traits": { "sociable": 0.5, "bold": 0.6, "loyal": 0.6, "restless": 0.2 }, "home": "notary", "lean": null,
+      "ties": [ { "to": "greta", "affinity": 0.4, "why": "he drew up her father's first will" } ] },
+    { "id": "ruth", "name": "Ruth Aske", "age": 71, "role": "lodger", "want": "to be left alone", "fear": "being moved",
+      "traits": { "sociable": 0.3, "bold": 0.2, "loyal": 0.9, "restless": 0.0 }, "home": "house", "lean": "keep",
+      "ties": [ { "to": "greta", "affinity": 0.6, "why": "twenty years in the back room" }, { "to": "jonas", "affinity": 0.4, "why": "he brings her apples over the wall" } ] },
+    { "id": "jonas", "name": "Jonas Feld", "age": 29, "role": "orchard hand", "want": "to be needed", "fear": "being the last one left",
+      "traits": { "sociable": 0.6, "bold": 0.4, "loyal": 0.7, "restless": 0.4 }, "home": "orchard", "lean": null,
+      "ties": [ { "to": "lena", "affinity": 0.5, "why": "they were sixteen once" }, { "to": "ruth", "affinity": 0.4, "why": "she taught him to graft" } ] }
+  ],
+  "fill": {
+    "count": 16,
+    "roles": ["cousin", "neighbour", "lodger", "bank clerk", "orchard hand", "publican", "cousin", "carpenter", "neighbour", "schoolteacher"],
+    "homes": ["house", "crown"],
+    "wants": ["to keep what they have", "to get their money out", "to be left alone", "to be needed", "to be somewhere new"],
+    "fears": ["having nothing", "being blamed", "being forgotten", "being moved"]
+  },
+  "playerSlots": 10
+}

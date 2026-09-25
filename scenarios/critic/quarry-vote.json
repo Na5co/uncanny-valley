@@ -1,0 +1,445 @@
+{
+  "id": "quarry-vote",
+  "title": "The Quarry Vote",
+  "premise": "Ashby's quarry wants to blast into Ryle Hill, the one green thing the town has left. The company promises forty jobs. In three days the parish votes: expand, refuse, or leave it to the county. Nobody is going anywhere; they just have to live with each other afterwards.",
+  "socialQuestion": {
+    "text": "Do people vote with their wallet or with the rumour they believe?",
+    "hypothesis": "Citizens who come to believe the quarry will not actually pay (belief quarryWontPay > 0.5) will vote 'refuse' at least twice as often as those who never hear it, regardless of their means.",
+    "measure": {
+      "outcome": "ending",
+      "splitBy": "belief:quarryWontPay",
+      "buckets": [
+        0.2,
+        0.5
+      ]
+    }
+  },
+  "fingerprint": {
+    "setting": "post-industrial English hill town, present day",
+    "pressure": "a binding parish vote in 72 hours; jobs vs. the last green hill",
+    "endingShape": "three-way vote: expand / refuse / abstain to the county",
+    "dynamic": "self-interest vs. shared place; who trusts the company"
+  },
+  "clock": {
+    "hours": 72,
+    "decisionEveryHours": 1,
+    "reflectionAt": [
+      24,
+      48
+    ]
+  },
+  "tempo": {
+    "preset": "live"
+  },
+  "boardingHours": 2,
+  "locations": [
+    {
+      "id": "hall",
+      "name": "Parish Hall",
+      "tags": [
+        "public"
+      ]
+    },
+    {
+      "id": "crown",
+      "name": "The Crown",
+      "tags": [
+        "public",
+        "social"
+      ]
+    },
+    {
+      "id": "quarry",
+      "name": "Ryle Quarry",
+      "tags": [
+        "work"
+      ]
+    },
+    {
+      "id": "hill",
+      "name": "Ryle Hill",
+      "tags": [
+        "public"
+      ]
+    },
+    {
+      "id": "terraces",
+      "name": "The Terraces",
+      "tags": [
+        "private",
+        "rest"
+      ]
+    }
+  ],
+  "paths": [
+    [
+      "hall",
+      "crown"
+    ],
+    [
+      "crown",
+      "terraces"
+    ],
+    [
+      "terraces",
+      "quarry"
+    ],
+    [
+      "hall",
+      "hill"
+    ],
+    [
+      "hill",
+      "quarry"
+    ],
+    [
+      "crown",
+      "quarry"
+    ]
+  ],
+  "beliefs": [
+    {
+      "id": "quarryWontPay",
+      "text": "the company has no money and the forty jobs are a story",
+      "initial": 0
+    },
+    {
+      "id": "hillIsUnstable",
+      "text": "blasting the hill will bring the terraces down",
+      "initial": 0
+    },
+    {
+      "id": "countyWillDecideAnyway",
+      "text": "the county will approve it whatever the parish says",
+      "initial": 0
+    }
+  ],
+  "events": [
+    {
+      "id": "company-pitch",
+      "at": 11,
+      "jitterHours": 1,
+      "chance": 1,
+      "stakes": 1,
+      "where": "quarry",
+      "headline": "The company man shows the plan: forty jobs, ten years.",
+      "text": "Glossy boards at the quarry gate. Real wages, he says, for people who have not had them in a decade.",
+      "effects": {
+        "mood": 0.1,
+        "belief": {
+          "quarryWontPay": -0.2
+        }
+      }
+    },
+    {
+      "id": "night-leaflet",
+      "at": 23,
+      "jitterHours": 0,
+      "chance": 1,
+      "stakes": 1,
+      "where": "hall",
+      "headline": "Someone pins a leaflet to the hall door at eleven at night.",
+      "text": "It says the company's last quarry in Wales shut owing six months of wages.",
+      "effects": {
+        "belief": {
+          "quarryWontPay": 0.6
+        }
+      }
+    },
+    {
+      "id": "pub-rumour",
+      "at": 34,
+      "jitterHours": 3,
+      "chance": 0.7,
+      "stakes": 2,
+      "where": "crown",
+      "headline": "A lorry driver says the company's cheques bounce.",
+      "text": "He hauled for them in Wales. He was not paid for the last two months.",
+      "effects": {
+        "belief": {
+          "quarryWontPay": 0.5
+        },
+        "mood": -0.1
+      }
+    },
+    {
+      "id": "survey-leak",
+      "at": 46,
+      "jitterHours": 4,
+      "chance": 0.6,
+      "stakes": 2,
+      "where": "crown",
+      "headline": "A leaked survey says the hill is riddled with old workings.",
+      "text": "Photocopied pages passed hand to hand. Voids under the north face, directly above the terraces.",
+      "effects": {
+        "belief": {
+          "hillIsUnstable": 0.6
+        },
+        "mood": -0.1
+      }
+    },
+    {
+      "id": "county-letter",
+      "at": 58,
+      "jitterHours": 2,
+      "chance": 1,
+      "stakes": 3,
+      "where": "all",
+      "headline": "The county writes: the parish vote is binding after all.",
+      "text": "No appeal. Whatever Ashby decides on Sunday stands for ten years.",
+      "effects": {
+        "belief": {
+          "countyWillDecideAnyway": -1
+        },
+        "mood": -0.1
+      },
+      "removesOption": true
+    },
+    {
+      "id": "the-hustings",
+      "at": 67,
+      "jitterHours": 0,
+      "chance": 1,
+      "stakes": 3,
+      "where": "all",
+      "headline": "The hustings. Both sides speak in the hall; the vote is at dawn.",
+      "text": "The company man and the schoolteacher take turns. Nobody claps for either.",
+      "effects": {
+        "mood": -0.1
+      }
+    }
+  ],
+  "ending": {
+    "prompt": "The parish votes at hour 72.",
+    "choices": [
+      {
+        "id": "expand",
+        "label": "Vote to expand the quarry",
+        "pull": {
+          "means": -0.6,
+          "belief:quarryWontPay": -0.8,
+          "belief:hillIsUnstable": -0.4,
+          "trait:bold": 0.3,
+          "want:steadyWages": 0.5,
+          "fear:havingNothing": 0.3
+        }
+      },
+      {
+        "id": "refuse",
+        "label": "Vote to refuse",
+        "pull": {
+          "means": 0.4,
+          "belief:quarryWontPay": 0.7,
+          "belief:hillIsUnstable": 0.6,
+          "bonds": 0.4,
+          "trait:loyal": 0.4,
+          "want:toKeepTheHill": 0.5
+        }
+      },
+      {
+        "id": "abstain",
+        "label": "Abstain and let the county decide",
+        "pull": {
+          "belief:countyWillDecideAnyway": 0.8,
+          "trait:bold": -0.5,
+          "mood": -0.4,
+          "bonds": -0.3,
+          "fear:beingBlamed": 0.6,
+          "trait:sociable": -0.2
+        }
+      }
+    ]
+  },
+  "citizens": [
+    {
+      "id": "dee",
+      "name": "Dee Halloran",
+      "age": 38,
+      "role": "schoolteacher",
+      "want": "to keep the hill",
+      "fear": "being blamed",
+      "traits": {
+        "sociable": 0.7,
+        "bold": 0.6,
+        "loyal": 0.8,
+        "restless": 0.2
+      },
+      "home": "terraces",
+      "lean": "refuse",
+      "ties": [
+        {
+          "to": "ron",
+          "affinity": 0.5,
+          "why": "he taught her to read the hill's paths"
+        },
+        {
+          "to": "gav",
+          "affinity": -0.2,
+          "why": "he laughed at the petition"
+        }
+      ]
+    },
+    {
+      "id": "gav",
+      "name": "Gav Pruett",
+      "age": 45,
+      "role": "quarry foreman",
+      "want": "steady wages",
+      "fear": "having nothing",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.7,
+        "loyal": 0.6,
+        "restless": 0.3
+      },
+      "home": "terraces",
+      "lean": "expand",
+      "ties": [
+        {
+          "to": "lena",
+          "affinity": 0.6,
+          "why": "his daughter; she needs a job here or she goes"
+        },
+        {
+          "to": "dee",
+          "affinity": -0.2,
+          "why": "she called him a company man"
+        }
+      ]
+    },
+    {
+      "id": "lena",
+      "name": "Lena Pruett",
+      "age": 19,
+      "role": "barmaid",
+      "want": "steady wages",
+      "fear": "being the last one left",
+      "traits": {
+        "sociable": 0.8,
+        "bold": 0.5,
+        "loyal": 0.5,
+        "restless": 0.7
+      },
+      "home": "terraces",
+      "lean": null,
+      "ties": [
+        {
+          "to": "gav",
+          "affinity": 0.5,
+          "why": "her father, who never asks what she wants"
+        },
+        {
+          "to": "dee",
+          "affinity": 0.4,
+          "why": "the only teacher who told her she was clever"
+        }
+      ]
+    },
+    {
+      "id": "ron",
+      "name": "Ron Ashcroft",
+      "age": 71,
+      "role": "retired blaster",
+      "want": "to be proven right",
+      "fear": "being blamed",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.4,
+        "loyal": 0.9,
+        "restless": 0.1
+      },
+      "home": "terraces",
+      "lean": null,
+      "ties": [
+        {
+          "to": "dee",
+          "affinity": 0.5,
+          "why": "she listens to the old stories"
+        }
+      ]
+    },
+    {
+      "id": "pat",
+      "name": "Pat Morrow",
+      "age": 56,
+      "role": "landlady",
+      "want": "to be needed",
+      "fear": "having nothing",
+      "traits": {
+        "sociable": 0.9,
+        "bold": 0.4,
+        "loyal": 0.7,
+        "restless": 0.2
+      },
+      "home": "crown",
+      "lean": null,
+      "ties": [
+        {
+          "to": "lena",
+          "affinity": 0.6,
+          "why": "she employs her and half-raised her"
+        },
+        {
+          "to": "gav",
+          "affinity": 0.3,
+          "why": "he drinks here and pays on time"
+        }
+      ]
+    },
+    {
+      "id": "sol",
+      "name": "Sol Wenham",
+      "age": 29,
+      "role": "parish clerk",
+      "want": "to be left alone",
+      "fear": "being blamed",
+      "traits": {
+        "sociable": 0.3,
+        "bold": 0.2,
+        "loyal": 0.5,
+        "restless": 0.4
+      },
+      "home": "terraces",
+      "lean": "abstain",
+      "ties": [
+        {
+          "to": "pat",
+          "affinity": 0.3,
+          "why": "she pours without asking questions"
+        }
+      ]
+    }
+  ],
+  "fill": {
+    "count": 20,
+    "roles": [
+      "quarryman",
+      "carer",
+      "delivery driver",
+      "shop assistant",
+      "pensioner",
+      "plumber",
+      "hairdresser",
+      "farmer",
+      "cleaner",
+      "apprentice"
+    ],
+    "homes": [
+      "terraces"
+    ],
+    "wants": [
+      "steady wages",
+      "to keep the hill",
+      "to be left alone",
+      "to be needed",
+      "to be proven right"
+    ],
+    "fears": [
+      "having nothing",
+      "being blamed",
+      "being the last one left",
+      "being wrong in public"
+    ]
+  },
+  "playerSlots": 10
+}

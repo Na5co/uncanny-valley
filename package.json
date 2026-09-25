@@ -1,0 +1,58 @@
+{
+  "name": "uncanny-valley",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Four AI people live fifteen years in a town an AI builds, while the classic experiments of social psychology run on them in disguise. Told as a novel whose every sentence is checked against what happened.",
+  "license": "AGPL-3.0-only",
+  "author": "Na5co (https://github.com/Na5co)",
+  "homepage": "https://afterparty.theform-monorepo.workers.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Na5co/uncanny-valley.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Na5co/uncanny-valley/issues"
+  },
+  "keywords": [
+    "llm",
+    "ai-agents",
+    "social-psychology",
+    "simulation",
+    "milgram",
+    "cloudflare-workers",
+    "generative-agents",
+    "deepseek",
+    "narrative"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  },
+  "packageManager": "pnpm@11.1.3",
+  "bin": {
+    "uncanny-valley": "./src/cli.ts"
+  },
+  "scripts": {
+    "valley": "node src/cli.ts",
+    "validate": "node src/cli.ts validate",
+    "world": "node src/cli.ts world",
+    "experiment": "node src/cli.ts experiment",
+    "watch": "node src/cli.ts watch",
+    "fork": "node src/cli.ts fork",
+    "architect": "node src/cli.ts architect",
+    "cost": "node src/cli.ts cost",
+    "site": "node src/cli.ts site",
+    "chronicle": "node src/cli.ts chronicle",
+    "cycle": "node src/cli.ts cycle",
+    "history": "node src/cli.ts history",
+    "live": "node src/cli.ts live",
+    "preflight": "node src/cli.ts preflight",
+    "build:assets": "rm -rf public && mkdir -p public/web && cp web/*.js web/*.mjs web/*.css public/web/",
+    "cf:dev": "pnpm build:assets && npx wrangler dev",
+    "cf:deploy": "pnpm build:assets && npx wrangler deploy",
+    "cf:tail": "npx wrangler tail --format pretty",
+    "cf:tick": "npx wrangler dev --test-scheduled",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "cf:check": "pnpm build:assets && npx wrangler deploy --dry-run --outdir .wrangler/dry"
+  }
+}

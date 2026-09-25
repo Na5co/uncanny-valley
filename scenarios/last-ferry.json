@@ -1,0 +1,574 @@
+{
+  "id": "last-ferry",
+  "title": "The Last Ferry",
+  "premise": "Halden's mine closed a month ago. The last ferry to the mainland leaves in three days. Everyone must decide whether to be on it.",
+  "socialQuestion": {
+    "text": "Do strong social bonds keep people in a place that is dying?",
+    "hypothesis": "Citizens whose top tie has affinity > 0.6 will choose 'stay' at a markedly higher rate than citizens with no tie above 0.3.",
+    "measure": {
+      "outcome": "ending",
+      "splitBy": "topTieAffinity",
+      "buckets": [
+        0.3,
+        0.6
+      ]
+    }
+  },
+  "fingerprint": {
+    "setting": "dying industrial town, coastal, present day",
+    "pressure": "departure deadline + economic collapse",
+    "endingShape": "binary leave/stay",
+    "dynamic": "loyalty vs. self-preservation"
+  },
+  "clock": {
+    "hours": 72,
+    "decisionEveryHours": 1,
+    "reflectionAt": [
+      24,
+      48
+    ]
+  },
+  "tempo": {
+    "preset": "live"
+  },
+  "boardingHours": 2,
+  "locations": [
+    {
+      "id": "harbor",
+      "name": "Harbour",
+      "tags": [
+        "public",
+        "exit"
+      ]
+    },
+    {
+      "id": "tavern",
+      "name": "The Lamp",
+      "tags": [
+        "public",
+        "social"
+      ]
+    },
+    {
+      "id": "mine",
+      "name": "Old Mine Gate",
+      "tags": [
+        "work"
+      ]
+    },
+    {
+      "id": "homes",
+      "name": "Row Houses",
+      "tags": [
+        "private",
+        "rest"
+      ]
+    }
+  ],
+  "paths": [
+    [
+      "harbor",
+      "tavern"
+    ],
+    [
+      "tavern",
+      "homes"
+    ],
+    [
+      "homes",
+      "mine"
+    ],
+    [
+      "tavern",
+      "mine"
+    ]
+  ],
+  "resources": [
+    {
+      "id": "ferryTickets",
+      "name": "ferry berths",
+      "initial": 18,
+      "perHour": 0,
+      "visible": true
+    }
+  ],
+  "beliefs": [
+    {
+      "id": "ferryCancelled",
+      "text": "the ferry has been cancelled",
+      "initial": 0
+    },
+    {
+      "id": "buyerComing",
+      "text": "someone is coming to buy the mine",
+      "initial": 0
+    }
+  ],
+  "events": [
+    {
+      "id": "pay-out",
+      "at": 9,
+      "jitterHours": 1,
+      "chance": 1,
+      "stakes": 1,
+      "where": "mine",
+      "headline": "The last wages are paid in cash at the gate.",
+      "text": "The company clerk hands out envelopes. There will not be another.",
+      "effects": {
+        "mood": 0.1
+      }
+    },
+    {
+      "id": "rumour-buyer",
+      "at": 20,
+      "jitterHours": 2,
+      "chance": 0.7,
+      "stakes": 1,
+      "where": "tavern",
+      "headline": "A stranger asks about the mine deeds.",
+      "text": "A man nobody recognises buys a round and asks who holds the deeds to the mine.",
+      "effects": {
+        "belief": {
+          "buyerComing": 0.5
+        }
+      }
+    },
+    {
+      "id": "tickets-short",
+      "at": 32,
+      "jitterHours": 1,
+      "chance": 1,
+      "stakes": 2,
+      "where": "mine",
+      "headline": "The harbourmaster nails the manifest to the mine gate: eighteen berths.",
+      "text": "Eighteen names fit. There are more than eighteen people.",
+      "effects": {
+        "mood": -0.2
+      },
+      "fx": "fog",
+      "fxHours": 6
+    },
+    {
+      "id": "ferry-cancelled-rumour",
+      "at": 44,
+      "jitterHours": 2,
+      "chance": 0.6,
+      "stakes": 2,
+      "where": "tavern",
+      "headline": "Word goes round: the ferry isn't coming.",
+      "text": "Someone's cousin on the mainland says the ferry company has folded.",
+      "effects": {
+        "belief": {
+          "ferryCancelled": 0.6
+        }
+      },
+      "fx": "storm",
+      "fxHours": 5
+    },
+    {
+      "id": "buyer-no-show",
+      "at": 56,
+      "jitterHours": 2,
+      "chance": 0.5,
+      "stakes": 2,
+      "where": "all",
+      "headline": "The stranger has left town without a word.",
+      "text": "His room at The Lamp is empty. He paid in cash. By breakfast everyone knows.",
+      "effects": {
+        "belief": {
+          "buyerComing": -0.6
+        },
+        "mood": -0.1
+      }
+    },
+    {
+      "id": "ferry-confirmed",
+      "at": 67,
+      "jitterHours": 0,
+      "chance": 1,
+      "stakes": 3,
+      "where": "all",
+      "headline": "The ferry is in the bay. It sails at dawn.",
+      "text": "Lights on the water. The harbourmaster rings the bell.",
+      "effects": {
+        "belief": {
+          "ferryCancelled": -1
+        }
+      },
+      "removesOption": true,
+      "fx": "aurora",
+      "fxHours": 5
+    }
+  ],
+  "ending": {
+    "prompt": "The ferry sails at hour 72.",
+    "choices": [
+      {
+        "id": "board",
+        "label": "Board the ferry",
+        "pull": {
+          "trait:restless": 0.6,
+          "trait:bold": 0.2,
+          "means": 0.4,
+          "belief:ferryCancelled": -0.9,
+          "bonds": -0.3,
+          "fear:havingNothing": 0.3,
+          "want:toSeeWhatHappensNext": 0.3
+        }
+      },
+      {
+        "id": "stay",
+        "label": "Stay in Halden",
+        "pull": {
+          "bonds": 0.5,
+          "trait:loyal": 0.4,
+          "belief:buyerComing": 0.5,
+          "belief:ferryCancelled": 0.5,
+          "means": -0.3,
+          "fear:beingForgotten": 0.2
+        }
+      }
+    ]
+  },
+  "citizens": [
+    {
+      "id": "mara",
+      "name": "Mara Lind",
+      "age": 31,
+      "role": "baker",
+      "want": "to open her own shop somewhere people will remember her",
+      "fear": "being forgotten",
+      "traits": {
+        "sociable": 0.7,
+        "bold": 0.5,
+        "loyal": 0.6,
+        "restless": 0.7
+      },
+      "home": "homes",
+      "lean": null,
+      "ties": [
+        {
+          "to": "tomas",
+          "affinity": 0.5,
+          "why": "he fixed her oven and stayed for tea"
+        }
+      ]
+    },
+    {
+      "id": "tomas",
+      "name": "Tomas Reyk",
+      "age": 44,
+      "role": "mine mechanic",
+      "want": "to be needed",
+      "fear": "leaving and finding out nobody noticed",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.3,
+        "loyal": 0.9,
+        "restless": 0.1
+      },
+      "home": "homes",
+      "lean": "stay",
+      "ties": [
+        {
+          "to": "mara",
+          "affinity": 0.6,
+          "why": "she is the only one who asks how he is"
+        },
+        {
+          "to": "gerd",
+          "affinity": -0.4,
+          "why": "Gerd signed the closure papers"
+        }
+      ]
+    },
+    {
+      "id": "gerd",
+      "name": "Gerd Sallow",
+      "age": 58,
+      "role": "mine foreman",
+      "want": "to leave with his name intact",
+      "fear": "being blamed",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.7,
+        "loyal": 0.3,
+        "restless": 0.5
+      },
+      "home": "homes",
+      "lean": "board",
+      "ties": [
+        {
+          "to": "tomas",
+          "affinity": -0.3,
+          "why": "Tomas thinks he sold them out"
+        },
+        {
+          "to": "ilse",
+          "affinity": 0.4,
+          "why": "old drinking companions"
+        }
+      ]
+    },
+    {
+      "id": "ilse",
+      "name": "Ilse Varn",
+      "age": 62,
+      "role": "tavern keeper",
+      "want": "to keep The Lamp open one more winter",
+      "fear": "having nothing",
+      "traits": {
+        "sociable": 0.9,
+        "bold": 0.4,
+        "loyal": 0.8,
+        "restless": 0.1
+      },
+      "home": "tavern",
+      "lean": "stay",
+      "ties": [
+        {
+          "to": "gerd",
+          "affinity": 0.4,
+          "why": "he has drunk here thirty years"
+        },
+        {
+          "to": "pell",
+          "affinity": 0.7,
+          "why": "she raised him after his mother left"
+        }
+      ]
+    },
+    {
+      "id": "pell",
+      "name": "Pell Varn",
+      "age": 19,
+      "role": "deckhand",
+      "want": "to see what happens next",
+      "fear": "being the last one left",
+      "traits": {
+        "sociable": 0.6,
+        "bold": 0.8,
+        "loyal": 0.5,
+        "restless": 0.9
+      },
+      "home": "tavern",
+      "lean": "board",
+      "ties": [
+        {
+          "to": "ilse",
+          "affinity": 0.8,
+          "why": "she raised him"
+        },
+        {
+          "to": "runa",
+          "affinity": 0.5,
+          "why": "they grew up on the same street"
+        }
+      ]
+    },
+    {
+      "id": "runa",
+      "name": "Runa Holt",
+      "age": 20,
+      "role": "schoolteacher's aide",
+      "want": "to be proven right",
+      "fear": "being wrong in public",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.6,
+        "loyal": 0.7,
+        "restless": 0.4
+      },
+      "home": "homes",
+      "lean": null,
+      "ties": [
+        {
+          "to": "pell",
+          "affinity": 0.5,
+          "why": "same street, same jokes"
+        },
+        {
+          "to": "aksel",
+          "affinity": -0.5,
+          "why": "he humiliated her at the town meeting"
+        }
+      ]
+    },
+    {
+      "id": "aksel",
+      "name": "Aksel Brenn",
+      "age": 51,
+      "role": "harbourmaster",
+      "want": "to be the one who decides",
+      "fear": "being blamed",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.9,
+        "loyal": 0.4,
+        "restless": 0.3
+      },
+      "home": "harbor",
+      "lean": null,
+      "ties": [
+        {
+          "to": "runa",
+          "affinity": -0.4,
+          "why": "she contradicted him in front of everyone"
+        }
+      ]
+    },
+    {
+      "id": "dov",
+      "name": "Dov Ekeli",
+      "age": 37,
+      "role": "doctor",
+      "want": "to leave a mark",
+      "fear": "being forgotten",
+      "traits": {
+        "sociable": 0.6,
+        "bold": 0.4,
+        "loyal": 0.7,
+        "restless": 0.5
+      },
+      "home": "homes",
+      "lean": null,
+      "ties": [
+        {
+          "to": "mara",
+          "affinity": 0.3,
+          "why": "he buys bread every morning"
+        },
+        {
+          "to": "hedda",
+          "affinity": 0.6,
+          "why": "they share the clinic hours"
+        }
+      ]
+    },
+    {
+      "id": "hedda",
+      "name": "Hedda Lund",
+      "age": 46,
+      "role": "nurse",
+      "want": "to keep what she has",
+      "fear": "having nothing",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.3,
+        "loyal": 0.8,
+        "restless": 0.2
+      },
+      "home": "homes",
+      "lean": "stay",
+      "ties": [
+        {
+          "to": "dov",
+          "affinity": 0.6,
+          "why": "the only colleague who stayed"
+        }
+      ]
+    },
+    {
+      "id": "sven",
+      "name": "Sven Arne",
+      "age": 29,
+      "role": "miner",
+      "want": "to see what happens next",
+      "fear": "being the last one left",
+      "traits": {
+        "sociable": 0.7,
+        "bold": 0.6,
+        "loyal": 0.4,
+        "restless": 0.8
+      },
+      "home": "homes",
+      "lean": "board",
+      "ties": [
+        {
+          "to": "tomas",
+          "affinity": 0.4,
+          "why": "Tomas taught him the winch"
+        },
+        {
+          "to": "kari",
+          "affinity": 0.7,
+          "why": "engaged, then not, then maybe"
+        }
+      ]
+    },
+    {
+      "id": "kari",
+      "name": "Kari Moss",
+      "age": 28,
+      "role": "postmistress",
+      "want": "to be left alone",
+      "fear": "being wrong in public",
+      "traits": {
+        "sociable": 0.3,
+        "bold": 0.5,
+        "loyal": 0.9,
+        "restless": 0.2
+      },
+      "home": "homes",
+      "lean": "stay",
+      "ties": [
+        {
+          "to": "sven",
+          "affinity": 0.6,
+          "why": "she still has the ring"
+        }
+      ]
+    },
+    {
+      "id": "olav",
+      "name": "Olav Gunne",
+      "age": 70,
+      "role": "retired miner",
+      "want": "to die where he was born",
+      "fear": "being moved",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.2,
+        "loyal": 1.0,
+        "restless": 0.0
+      },
+      "home": "homes",
+      "lean": "stay",
+      "ties": [
+        {
+          "to": "ilse",
+          "affinity": 0.5,
+          "why": "she keeps his tab open"
+        }
+      ]
+    }
+  ],
+  "fill": {
+    "count": 14,
+    "roles": [
+      "miner",
+      "fisher",
+      "clerk",
+      "shopkeeper",
+      "miner's widow",
+      "dock hand",
+      "cook",
+      "apprentice",
+      "ferry clerk"
+    ],
+    "wants": [
+      "to be left alone",
+      "to be needed",
+      "to see what happens next",
+      "to keep what they have",
+      "to get their money out"
+    ],
+    "fears": [
+      "being forgotten",
+      "having nothing",
+      "being the last one left",
+      "being blamed"
+    ]
+  },
+  "playerSlots": 10
+}

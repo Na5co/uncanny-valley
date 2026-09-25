@@ -1,0 +1,23 @@
+node_modules/
+public/
+.wrangler/
+.tmp/
+
+# secrets: the model key lives in .env (the CLI) or .dev.vars (wrangler dev), never in the repo
+.env
+.env.*
+!.env.example
+.dev.vars*
+
+# what running things writes
+/archive/
+/cycles/
+/live/
+experiments/
+logs/
+scenarios/generated/
+scenarios/chronicle/generated/
+
+# local tooling
+.claude/
+.DS_Store

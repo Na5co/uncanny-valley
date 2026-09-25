@@ -1,0 +1,55 @@
+# Uncanny Valley on Cloudflare. One worker streams every page from R2; one cron plays a season every twenty minutes and a
+# second draws the pages seven minutes later. The running state and every finished run live in R2 (KV is only read as a
+# fallback for old copies). No process, no disk, no ports. The worker and bucket keep the project's first name, afterparty.
+#
+#   npx wrangler kv namespace create ROOM
+#   npx wrangler r2 bucket create afterparty-records
+#   # put the KV id below, then:
+#   npx wrangler secret put DEEPSEEK_API_KEY
+#   npx wrangler deploy
+name = "afterparty"
+main = "src/live/worker.ts"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# the pages are rendered by the worker; the files under web/ are served beside them at the same paths the pages ask for
+# (`pnpm build:assets` copies web/ into public/web/, because assets are served relative to this directory)
+[assets]
+directory = "./public"
+
+# One season every twenty minutes: fifteen years take twenty hours, one of the four acts about every five minutes, and
+# the model bill is half what a ten-minute season costs. RUNS_PER_WORLD below is the other half of that trade.
+[triggers]
+crons = ["*/20 * * * *", "7,27,47 * * * *"]   # the clock on the twenties; the pages drawn seven minutes after, in a firing of their own
+
+[vars]
+SCENARIO = "the-many"
+SEASON_MS = "1200000"
+BRAIN = "flash"                      # the model decides; "mock" puts it back on the dice without touching anything else
+VALLEY_LLM_BASE_URL = "https://api.deepseek.com"
+VALLEY_CITIZEN_MODEL = "deepseek-flash"
+VALLEY_ARCHITECT_MODEL = "deepseek-v4-pro"   # the chronicler, and the Architect who writes the towns
+RUNS_PER_WORLD = "1"                             # a new town every run (the Architect has four tries; if all fail, the last town is played again and health:architect says so); "3" is every third run, "0" never
+
+# the Architect's prompt travels with the worker as text: there is no disk to read it from
+[[rules]]
+type = "Text"
+globs = ["**/*.md"]
+fallthrough = true
+
+[[kv_namespaces]]
+binding = "ROOM"
+id = "9e78a1a371c74e61bb5fcc1a81bd96fa"
+
+[[r2_buckets]]
+binding = "RECORDS"
+bucket_name = "afterparty-records"
+
+[observability]
+enabled = true
+
+# The domain, once the worker is up:
+# [[routes]]
+# pattern = "four.example.com"
+# custom_domain = true

@@ -1,0 +1,348 @@
+{
+  "_about": "Hand-written reference decision engine for last-ferry — the shape the Architect compiles (prompts/architect-decision-engine.md). The rules engine reads pressureCurve/archetypes/tripwires; the Citizen prompt uses the rest as its cached prefix.",
+  "worldFacts": [
+    "Halden's mine closed a month ago; the last ferry to the mainland sails at hour 72 and there will not be another.",
+    "Everyone must be on the ferry or not. Boarding is final; staying is final.",
+    "The harbour is where the ferry docks; The Lamp is the tavern where news travels; the mine gate is where the last wages were paid.",
+    "A stranger has been asking about the mine deeds — nobody knows if a buyer is real.",
+    "The ferry has eighteen berths; there are more than eighteen people.",
+    "Rumours here spread by talking, usually at The Lamp in the evening.",
+    "The mainland means work and strangers; Halden means the people you already know and no work.",
+    "Money put by makes leaving easier; having none makes it frightening either way.",
+    "Nobody can make anyone else's choice, but people who are close to each other feel it when they choose differently."
+  ],
+  "actionVocabulary": [
+    {
+      "id": "rest",
+      "label": "rest",
+      "primitive": "rest",
+      "precondition": "true",
+      "effect": "restores energy",
+      "tone": "let the day settle; sleep on it"
+    },
+    {
+      "id": "work",
+      "label": "work a shift at the mine gate",
+      "primitive": "work",
+      "precondition": "at(mine)",
+      "effect": "+means, -energy",
+      "tone": "keep the hands busy; there is still something to earn"
+    },
+    {
+      "id": "move",
+      "label": "go somewhere",
+      "primitive": "move(to)",
+      "params": "to: location",
+      "precondition": "true",
+      "effect": "changes location",
+      "tone": "see who is about; be where the news is"
+    },
+    {
+      "id": "talk",
+      "label": "talk with someone here",
+      "primitive": "talk(with)",
+      "params": "with: citizen",
+      "precondition": "with(citizen)",
+      "effect": "moves the tie; rumours leak",
+      "tone": "hear what they think; find out where they stand"
+    },
+    {
+      "id": "share",
+      "label": "tell someone what you believe",
+      "primitive": "share(belief, with)",
+      "params": "belief, with",
+      "precondition": "with(citizen) && belief(any) > 0.5",
+      "effect": "spreads a belief, weighted by trust",
+      "tone": "they ought to know"
+    },
+    {
+      "id": "confront",
+      "label": "have it out with someone",
+      "primitive": "confront(whom)",
+      "params": "whom: citizen",
+      "precondition": "with(citizen)",
+      "effect": "sours the tie; clears the air",
+      "tone": "say the thing that has been sitting there"
+    },
+    {
+      "id": "commit",
+      "label": "decide for good",
+      "primitive": "commit(choice)",
+      "params": "choice",
+      "precondition": "lean == any",
+      "effect": "locks the ending unless real news shakes it",
+      "tone": "stop turning it over"
+    },
+    {
+      "id": "wait",
+      "label": "wait and watch",
+      "primitive": "wait",
+      "precondition": "true",
+      "effect": "nothing",
+      "tone": "let others show their hand first"
+    }
+  ],
+  "archetypes": [
+    {
+      "id": "loyalist",
+      "name": "The Loyalist",
+      "traitRange": {
+        "loyal": [
+          0.7,
+          1
+        ]
+      },
+      "oneLiner": "You are held here by people, not places. Leaving would mean leaving someone.",
+      "heuristics": [
+        "You go to the person you trust most before you decide anything.",
+        "A rumour is only true once someone you trust says it.",
+        "When a friend chooses the other way, it hurts — and it changes nothing about what you owe them.",
+        "You decide late, and once you do you do not waver for small news."
+      ],
+      "candidateBias": {
+        "talk": 0.15,
+        "confront": -0.1,
+        "commit": -0.1
+      }
+    },
+    {
+      "id": "mover",
+      "name": "The Mover",
+      "traitRange": {
+        "loyal": [
+          0,
+          0.6999
+        ],
+        "bold": [
+          0.6,
+          1
+        ]
+      },
+      "oneLiner": "You would rather be wrong somewhere new than right here.",
+      "heuristics": [
+        "You decide early and say so out loud.",
+        "You believe your own eyes over any cousin's story.",
+        "If someone stands in your way, you have it out with them rather than around them.",
+        "Money put by is a door; you use doors."
+      ],
+      "candidateBias": {
+        "commit": 0.15,
+        "confront": 0.1,
+        "rest": -0.1
+      }
+    },
+    {
+      "id": "weathervane",
+      "name": "The Weathervane",
+      "traitRange": {
+        "loyal": [
+          0,
+          0.6999
+        ],
+        "bold": [
+          0,
+          0.5999
+        ],
+        "sociable": [
+          0.6,
+          1
+        ]
+      },
+      "oneLiner": "You know what everyone thinks because you asked. You are still not sure what you think.",
+      "heuristics": [
+        "You go where the most people are and listen.",
+        "A rumour told twice is a fact to you.",
+        "You lean the way the room leans, and change when the room changes.",
+        "You commit when you can name three people who chose the same."
+      ],
+      "candidateBias": {
+        "talk": 0.2,
+        "share": 0.1,
+        "commit": -0.15
+      }
+    },
+    {
+      "id": "quiet",
+      "name": "The Quiet One",
+      "traitRange": {
+        "loyal": [
+          0,
+          0.6999
+        ],
+        "bold": [
+          0,
+          0.5999
+        ],
+        "sociable": [
+          0,
+          0.5999
+        ]
+      },
+      "oneLiner": "You keep to yourself and keep your reasons. Nobody will hear your choice until it is made.",
+      "heuristics": [
+        "You work while there is work; it stops the thinking.",
+        "You avoid confrontation and remember slights for a long time.",
+        "You believe what you saw, discount what you heard.",
+        "You decide alone, usually at night, and tell no one."
+      ],
+      "candidateBias": {
+        "work": 0.15,
+        "rest": 0.05,
+        "talk": -0.1,
+        "confront": -0.15
+      }
+    }
+  ],
+  "pressureCurve": [
+    {
+      "fromHour": 0,
+      "phase": "settling in",
+      "weights": {
+        "social": 1.0,
+        "means": 1.2,
+        "commit": 0.0,
+        "rest": 1.0,
+        "belief": 0.7
+      },
+      "note": "There is time. Wages are still owed. People find out who else is here."
+    },
+    {
+      "fromHour": 20,
+      "phase": "taking sides",
+      "weights": {
+        "social": 1.3,
+        "means": 0.7,
+        "commit": 0.2,
+        "rest": 0.9,
+        "belief": 1.1
+      },
+      "note": "The stranger has been asking questions. Who you drink with starts to matter."
+    },
+    {
+      "fromHour": 44,
+      "phase": "the squeeze",
+      "weights": {
+        "social": 1.5,
+        "means": 0.2,
+        "commit": 0.9,
+        "rest": 0.5,
+        "belief": 1.4
+      },
+      "note": "Work has stopped mattering. People seek the ones they trust; rumours run."
+    },
+    {
+      "fromHour": 64,
+      "phase": "last hours",
+      "weights": {
+        "social": 1.1,
+        "means": 0.0,
+        "commit": 1.8,
+        "rest": 0.3,
+        "belief": 1.6
+      },
+      "note": "The ferry is in the bay. Decide, or be decided for."
+    }
+  ],
+  "reflectionQuestions": [
+    "Who here would I not leave without — and are they leaving?",
+    "What did I hear today that I actually believe, and who told me?",
+    "If the ferry sailed this minute, would I be on it?"
+  ],
+  "exemplars": [
+    {
+      "archetype": "loyalist",
+      "hour": 9,
+      "context": "## Now\nHour 9 · 63 hours left · settling in — There is time. Wages are still owed. People find out who else is here.\nYou are at **Old Mine Gate**. Here: Sven (miner), Gerd (mine foreman).\nYour lean: Stay in Halden. Means: 0.2.\n\nRecent:\n- h9: The last wages are paid in cash at the gate.\n\nTies:\n- Mara: close — she is the only one who asks how he is\n- Gerd: strained — Gerd signed the closure papers\n\nCANDIDATES (ranked):\n1. work → null — work a shift at the mine gate\n2. talk → sven — talk with Sven Arne\n3. move → tavern — go to The Lamp\n\nChoose.",
+      "decision": {
+        "action": "work",
+        "target": null,
+        "thought": "Last envelope. I'll earn it properly, then find Mara."
+      }
+    },
+    {
+      "archetype": "mover",
+      "hour": 20,
+      "context": "## Now\nHour 20 · 52 hours left · settling in — There is time. Wages are still owed. People find out who else is here.\nYou are at **The Lamp**. Here: Ilse (tavern keeper), Runa (schoolteacher's aide), Wren (ferry clerk).\nYour lean: Board the ferry. Means: 0.3.\n\nRecent:\n- h20: A stranger asks about the mine deeds.\n\nTies:\n- Ilse: close — she raised him\n- Runa: friendly — same street, same jokes\n\nBeliefs you hold:\n- someone is coming to buy the mine (half believes)\n\nCANDIDATES (ranked):\n1. talk → runa — talk with Runa Holt\n2. share → buyerComing|ilse — tell Ilse Varn that someone is coming to buy the mine\n3. rest → null — rest\n\nChoose.",
+      "decision": {
+        "action": "talk",
+        "target": "runa",
+        "thought": "A stranger with money means nothing. I want to know if Runa's coming.",
+        "say": "Runa — are you on that ferry or not? I need to know before I pack."
+      }
+    },
+    {
+      "archetype": "weathervane",
+      "hour": 44,
+      "context": "## Now\nHour 44 · 28 hours left · taking sides — The manifest is posted. Who you drink with starts to matter.\nYou are at **The Lamp**. Here: Bo (cook), Pia (clerk), Dov (doctor), Kai (apprentice).\nYour lean: undecided. Means: 0.4.\n\nRecent:\n- h44: Word goes round: the ferry isn't coming.\n\nTies:\n- Pia: friendly — talked at The Lamp\n- Bo: friendly — they work near each other\n\nBeliefs you hold:\n- the ferry has been cancelled (believes)\n\nCANDIDATES (ranked):\n1. talk → dov — talk with Dov Ekeli\n2. share → ferryCancelled|kai — tell Kai that the ferry has been cancelled\n3. move → homes — go to Row Houses\n\nChoose.",
+      "decision": {
+        "action": "share",
+        "target": "ferryCancelled|kai",
+        "thought": "If it's true, everyone should know before they pack. Kai first.",
+        "say": "Kai — they're saying the ferry company's folded. Don't pack yet."
+      }
+    },
+    {
+      "archetype": "quiet",
+      "hour": 33,
+      "context": "## Now\nHour 33 · 39 hours left · taking sides — The manifest is posted. Who you drink with starts to matter.\nYou are at **Old Mine Gate**. Here: Tomas (mine mechanic).\nYour lean: undecided. Means: 0.5.\n\nRecent:\n- h33: The harbourmaster nails the manifest to the mine gate: eighteen berths.\n\nTies:\n- Hedda: friendly — the only colleague who stayed\n\nCANDIDATES (ranked):\n1. work → null — work a shift at the mine gate\n2. talk → tomas — talk with Tomas Reyk\n3. wait → null — wait and watch\n\nChoose.",
+      "decision": {
+        "action": "work",
+        "target": null,
+        "thought": "Eighteen. I counted the row houses this morning. Better to have something in my pocket either way."
+      }
+    },
+    {
+      "archetype": "loyalist",
+      "hour": 66,
+      "context": "## Now\nHour 66 · 6 hours left · last hours — The ferry is in the bay. Decide, or be decided for.\nYou are at **The Lamp**. Here: Mara (baker), Olav (retired miner).\nYour lean: Stay in Halden. Means: 0.3.\n\nRecent:\n- h64: Mara Lind commits — Board the ferry\n- h65: talked with Mara Lind\n\nTies:\n- Mara: friendly — Mara chose Board the ferry; Tomas wanted Stay in Halden\n\nCANDIDATES (ranked):\n1. commit → stay — commit: Stay in Halden\n2. talk → mara — talk with Mara Lind\n3. rest → null — rest\n\nChoose.",
+      "decision": {
+        "action": "talk",
+        "target": "mara",
+        "thought": "She's going. I'll not lock the door on her with an hour to spare.",
+        "say": "I'm not asking you to stay, Mara. I'm asking you to have a drink with me first."
+      }
+    },
+    {
+      "archetype": "mover",
+      "hour": 68,
+      "context": "## Now\nHour 68 · 4 hours left · last hours — The ferry is in the bay. Decide, or be decided for.\nYou are at **Harbour**. Here: Aksel (harbourmaster), Sven (miner).\nYour lean: Board the ferry. Means: 0.7.\n\nRecent:\n- h67: The ferry is in the bay. It sails at dawn.\n\nTies:\n- Kari: friendly — she still has the ring\n\nBeliefs you hold:\n- the ferry has been cancelled (doubts)\n\nCANDIDATES (ranked):\n1. commit → board — commit: Board the ferry\n2. talk → aksel — talk with Aksel Brenn\n3. move → tavern — go to The Lamp\n\nChoose.",
+      "decision": {
+        "action": "commit",
+        "target": "board",
+        "thought": "Lights on the water. That's the end of the arguing."
+      }
+    },
+    {
+      "archetype": "quiet",
+      "hour": 62,
+      "context": "## Now\nHour 62 · 10 hours left · the squeeze — Work has stopped mattering. People seek the ones they trust; rumours run.\nYou are at **Row Houses**. Here: no one.\nYour lean: Stay in Halden. Means: 0.6.\n\nRecent:\n- h58: Gerd Sallow told me the stranger has left town without a word\n\nTies:\n- Dov: friendly — he buys bread every morning\n\nCANDIDATES (ranked):\n1. rest → null — rest\n2. move → tavern — go to The Lamp\n3. commit → stay — commit: Stay in Halden\n\nChoose.",
+      "decision": {
+        "action": "commit",
+        "target": "stay",
+        "thought": "No buyer. No ferry for me either. I'll say it to no one; I'll just be here."
+      }
+    }
+  ],
+  "tripwires": [
+    {
+      "id": "split-pair",
+      "when": "pair:mara,tomas apart",
+      "hint": "Mara and Tomas are close and leaning opposite ways"
+    },
+    {
+      "id": "rumour-half",
+      "when": "belief:ferryCancelled avg > 0.2",
+      "hint": "The rumour that the ferry isn't coming has reached a good part of the town"
+    },
+    {
+      "id": "late-undecided",
+      "when": "hoursLeft < 12 && undecided > 2",
+      "hint": "With a night to go, people still haven't chosen"
+    },
+    {
+      "id": "berths",
+      "when": "count:board > 18",
+      "hint": "More people mean to board than there are berths"
+    }
+  ]
+}

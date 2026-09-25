@@ -1,0 +1,528 @@
+{
+  "id": "adrift",
+  "title": "Adrift",
+  "premise": "The coastal packet Ysolde lost her engine two nights ago and is drifting. Water for two days if it is shared. The captain says wait for rescue. Some of the crew say the lifeboats could reach the coast. Nobody knows which is true.",
+  "socialQuestion": {
+    "text": "Under scarcity, do the bold take first, or do the loyal give way first?",
+    "hypothesis": "Citizens with bold > 0.7 will choose the lifeboats at a higher rate than citizens with bold < 0.4, regardless of whether land is sighted.",
+    "measure": {
+      "outcome": "ending",
+      "splitBy": "trait:bold",
+      "buckets": [
+        0.4,
+        0.7
+      ]
+    }
+  },
+  "fingerprint": {
+    "setting": "drifting passenger ship, open sea, early twentieth century",
+    "pressure": "water scarcity + uncertain rescue",
+    "endingShape": "three-way: lifeboats / stay with ship / side with mutiny",
+    "dynamic": "authority vs. initiative under scarcity"
+  },
+  "clock": {
+    "hours": 72,
+    "decisionEveryHours": 1,
+    "reflectionAt": [
+      24,
+      48
+    ]
+  },
+  "tempo": {
+    "preset": "live"
+  },
+  "boardingHours": 2,
+  "locations": [
+    {
+      "id": "deck",
+      "name": "Main Deck",
+      "tags": [
+        "public",
+        "social"
+      ]
+    },
+    {
+      "id": "bridge",
+      "name": "Bridge",
+      "tags": [
+        "public",
+        "work"
+      ]
+    },
+    {
+      "id": "engine",
+      "name": "Engine Room",
+      "tags": [
+        "work"
+      ]
+    },
+    {
+      "id": "cabins",
+      "name": "Cabins",
+      "tags": [
+        "private",
+        "rest"
+      ]
+    },
+    {
+      "id": "boats",
+      "name": "Boat Deck",
+      "tags": [
+        "public",
+        "exit"
+      ]
+    }
+  ],
+  "paths": [
+    [
+      "deck",
+      "bridge"
+    ],
+    [
+      "deck",
+      "engine"
+    ],
+    [
+      "deck",
+      "cabins"
+    ],
+    [
+      "deck",
+      "boats"
+    ],
+    [
+      "cabins",
+      "boats"
+    ]
+  ],
+  "resources": [
+    {
+      "id": "water",
+      "name": "water (litres)",
+      "initial": 240,
+      "perHour": -4,
+      "visible": true
+    }
+  ],
+  "beliefs": [
+    {
+      "id": "rescueComing",
+      "text": "the company knows where we are and a ship is coming",
+      "initial": 0.3
+    },
+    {
+      "id": "coastIsClose",
+      "text": "the coast is close enough to row to",
+      "initial": 0.1
+    },
+    {
+      "id": "captainHiding",
+      "text": "the captain is hiding how bad the water is",
+      "initial": 0,
+      "about": "captain"
+    }
+  ],
+  "events": [
+    {
+      "id": "rationing",
+      "at": 6,
+      "jitterHours": 2,
+      "chance": 1,
+      "stakes": 1,
+      "where": "deck",
+      "headline": "The captain orders water rationed: one cup, twice a day.",
+      "text": "He says it calmly. Nobody argues yet.",
+      "effects": {
+        "mood": -0.1
+      }
+    },
+    {
+      "id": "engine-hope",
+      "at": 17,
+      "jitterHours": 3,
+      "chance": 0.5,
+      "stakes": 1,
+      "where": "engine",
+      "headline": "The engineer thinks the pump might be saved.",
+      "text": "Two more hours, maybe three. Maybe.",
+      "effects": {
+        "belief": {
+          "rescueComing": 0.2
+        },
+        "mood": 0.1
+      }
+    },
+    {
+      "id": "gulls",
+      "at": 28,
+      "jitterHours": 4,
+      "chance": 0.6,
+      "stakes": 2,
+      "where": "deck",
+      "headline": "Gulls. A lot of them, off the port bow.",
+      "text": "Gulls do not sleep at sea. Somebody says that out loud.",
+      "effects": {
+        "belief": {
+          "coastIsClose": 0.5
+        }
+      },
+      "fx": "rain",
+      "fxHours": 4
+    },
+    {
+      "id": "water-stolen",
+      "at": 39,
+      "jitterHours": 3,
+      "chance": 1,
+      "stakes": 2,
+      "where": "all",
+      "headline": "A water cask is found broken open and half gone.",
+      "text": "The captain locks the rest in the bridge. He will not say how much is left.",
+      "effects": {
+        "resource": {
+          "water": -60
+        },
+        "belief": {
+          "captainHiding": 0.5
+        },
+        "mood": -0.2
+      },
+      "fx": "storm",
+      "fxHours": 6
+    },
+    {
+      "id": "mutiny-whisper",
+      "at": 50,
+      "jitterHours": 3,
+      "chance": 1,
+      "stakes": 2,
+      "where": "cabins",
+      "headline": "The bosun says it plainly: take the bridge, take the water, take the boats.",
+      "text": "He says it to four people. By morning it is twelve.",
+      "effects": {
+        "belief": {
+          "captainHiding": 0.3
+        }
+      }
+    },
+    {
+      "id": "land-or-not",
+      "at": 60,
+      "jitterHours": 3,
+      "chance": 0.5,
+      "stakes": 2,
+      "where": "all",
+      "headline": "A smudge on the horizon at first light. Land, or cloud. Everyone comes up to look.",
+      "text": "Half the deck sees land. The other half sees weather.",
+      "effects": {
+        "belief": {
+          "coastIsClose": 0.4
+        }
+      },
+      "fx": "fog",
+      "fxHours": 5
+    },
+    {
+      "id": "last-water",
+      "at": 68,
+      "jitterHours": 0,
+      "chance": 1,
+      "stakes": 3,
+      "where": "all",
+      "headline": "The captain opens the bridge: this is the last of the water.",
+      "text": "One cask. He sets it on the deck and steps back. The boats are swung out.",
+      "effects": {
+        "belief": {
+          "captainHiding": -0.5
+        },
+        "mood": -0.2
+      },
+      "removesOption": true,
+      "fx": "eclipse",
+      "fxHours": 3
+    }
+  ],
+  "ending": {
+    "prompt": "At hour 72 the boats go over the side, or they do not.",
+    "choices": [
+      {
+        "id": "boats",
+        "label": "Take a lifeboat and row",
+        "pull": {
+          "trait:bold": 0.6,
+          "trait:restless": 0.3,
+          "belief:coastIsClose": 0.7,
+          "belief:rescueComing": -0.5,
+          "bonds": -0.2,
+          "fear:beingTheLastOneLeft": 0.2
+        }
+      },
+      {
+        "id": "ship",
+        "label": "Stay with the ship",
+        "pull": {
+          "trait:loyal": 0.5,
+          "belief:rescueComing": 0.7,
+          "belief:captainHiding": -0.4,
+          "bonds": 0.4,
+          "mood": 0.2,
+          "fear:beingWrongInPublic": 0.2
+        }
+      },
+      {
+        "id": "mutiny",
+        "label": "Side with the bosun",
+        "pull": {
+          "trait:bold": 0.3,
+          "belief:captainHiding": 0.8,
+          "belief:rescueComing": -0.3,
+          "bonds": 0.3,
+          "mood": -0.4,
+          "trait:loyal": -0.3,
+          "want:toBeTheOneWhoDecides": 0.6
+        }
+      }
+    ]
+  },
+  "citizens": [
+    {
+      "id": "captain",
+      "name": "Captain Hale",
+      "age": 56,
+      "role": "captain",
+      "want": "to bring every soul home",
+      "fear": "being blamed",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.5,
+        "loyal": 0.9,
+        "restless": 0.1
+      },
+      "home": "bridge",
+      "lean": "ship",
+      "ties": [
+        {
+          "to": "bosun",
+          "affinity": -0.3,
+          "why": "the bosun wanted the boats on day one"
+        },
+        {
+          "to": "engineer",
+          "affinity": 0.6,
+          "why": "twenty years of the same ship"
+        }
+      ]
+    },
+    {
+      "id": "bosun",
+      "name": "Bosun Kerr",
+      "age": 41,
+      "role": "bosun",
+      "want": "to be the one who decides",
+      "fear": "being the last one left",
+      "traits": {
+        "sociable": 0.7,
+        "bold": 0.9,
+        "loyal": 0.3,
+        "restless": 0.7
+      },
+      "home": "cabins",
+      "lean": "mutiny",
+      "ties": [
+        {
+          "to": "captain",
+          "affinity": -0.4,
+          "why": "he thinks the captain has frozen"
+        },
+        {
+          "to": "dace",
+          "affinity": 0.5,
+          "why": "his best oarsman"
+        }
+      ]
+    },
+    {
+      "id": "engineer",
+      "name": "Chief Amsel",
+      "age": 49,
+      "role": "engineer",
+      "want": "to fix it",
+      "fear": "being wrong in public",
+      "traits": {
+        "sociable": 0.3,
+        "bold": 0.4,
+        "loyal": 0.8,
+        "restless": 0.2
+      },
+      "home": "engine",
+      "lean": null,
+      "ties": [
+        {
+          "to": "captain",
+          "affinity": 0.6,
+          "why": "the only officer who listens"
+        }
+      ]
+    },
+    {
+      "id": "dace",
+      "name": "Dace Orrin",
+      "age": 23,
+      "role": "deckhand",
+      "want": "to see what happens next",
+      "fear": "having nothing",
+      "traits": {
+        "sociable": 0.6,
+        "bold": 0.8,
+        "loyal": 0.5,
+        "restless": 0.9
+      },
+      "home": "cabins",
+      "lean": null,
+      "ties": [
+        {
+          "to": "bosun",
+          "affinity": 0.5,
+          "why": "the bosun got him the berth"
+        },
+        {
+          "to": "mrs-pell",
+          "affinity": 0.3,
+          "why": "he carried her trunk aboard"
+        }
+      ]
+    },
+    {
+      "id": "mrs-pell",
+      "name": "Mrs. Pell",
+      "age": 63,
+      "role": "passenger",
+      "want": "to reach her daughter",
+      "fear": "being forgotten",
+      "traits": {
+        "sociable": 0.8,
+        "bold": 0.3,
+        "loyal": 0.7,
+        "restless": 0.2
+      },
+      "home": "cabins",
+      "lean": "ship",
+      "ties": [
+        {
+          "to": "dace",
+          "affinity": 0.4,
+          "why": "he is the age of her grandson"
+        },
+        {
+          "to": "doctor",
+          "affinity": 0.5,
+          "why": "he looked at her hand without being asked"
+        }
+      ]
+    },
+    {
+      "id": "doctor",
+      "name": "Dr. Sowe",
+      "age": 38,
+      "role": "ship's doctor",
+      "want": "to be needed",
+      "fear": "being blamed",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.4,
+        "loyal": 0.6,
+        "restless": 0.4
+      },
+      "home": "cabins",
+      "lean": null,
+      "ties": [
+        {
+          "to": "mrs-pell",
+          "affinity": 0.4,
+          "why": "his most talkative patient"
+        },
+        {
+          "to": "captain",
+          "affinity": 0.2,
+          "why": "the captain hides his cough from him"
+        }
+      ]
+    },
+    {
+      "id": "ines",
+      "name": "Ines Varga",
+      "age": 30,
+      "role": "passenger",
+      "want": "to be somewhere new",
+      "fear": "being the last one left",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.7,
+        "loyal": 0.4,
+        "restless": 0.8
+      },
+      "home": "cabins",
+      "lean": "boats",
+      "ties": [
+        {
+          "to": "lo",
+          "affinity": 0.6,
+          "why": "they booked the passage together"
+        }
+      ]
+    },
+    {
+      "id": "lo",
+      "name": "Lo Varga",
+      "age": 32,
+      "role": "passenger",
+      "want": "to keep what they have",
+      "fear": "having nothing",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.2,
+        "loyal": 0.9,
+        "restless": 0.2
+      },
+      "home": "cabins",
+      "lean": "ship",
+      "ties": [
+        {
+          "to": "ines",
+          "affinity": 0.7,
+          "why": "married eight years"
+        }
+      ]
+    }
+  ],
+  "fill": {
+    "count": 18,
+    "roles": [
+      "deckhand",
+      "stoker",
+      "passenger",
+      "steward",
+      "cook",
+      "passenger",
+      "oiler",
+      "cabin boy"
+    ],
+    "homes": [
+      "cabins"
+    ],
+    "wants": [
+      "to see what happens next",
+      "to be needed",
+      "to keep what they have",
+      "to be left alone",
+      "to reach the coast"
+    ],
+    "fears": [
+      "being the last one left",
+      "having nothing",
+      "being blamed",
+      "being wrong in public"
+    ]
+  },
+  "playerSlots": 10
+}

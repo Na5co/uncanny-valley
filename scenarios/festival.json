@@ -1,0 +1,511 @@
+{
+  "id": "festival",
+  "title": "Three Nights at Kell Fair",
+  "premise": "A travelling fair pitches on the common of a small farming town for three nights. Fair folk and townspeople share one square. When the tents come down, some will leave with the fair, some will go home, and some will not go back to the life they had.",
+  "socialQuestion": {
+    "text": "Does a rumour introduced late change more minds than one introduced early?",
+    "hypothesis": "Citizens exposed to the late rumour (hour ~55) end up with a final choice different from their hour-0 lean more often than citizens who were not.",
+    "measure": {
+      "outcome": "changedMind",
+      "splitBy": "exposedTo:late-rumour"
+    }
+  },
+  "fingerprint": {
+    "setting": "travelling fair on a farm-town common, three nights",
+    "pressure": "the fair leaves at dawn on the fourth day; a once-only invitation",
+    "endingShape": "three-way: go with the fair / go home / stay but changed",
+    "dynamic": "strangers vs. neighbours; novelty vs. belonging"
+  },
+  "clock": {
+    "hours": 72,
+    "decisionEveryHours": 1,
+    "reflectionAt": [
+      24,
+      48
+    ]
+  },
+  "tempo": {
+    "preset": "live"
+  },
+  "boardingHours": 2,
+  "locations": [
+    {
+      "id": "square",
+      "name": "The Common",
+      "tags": [
+        "public",
+        "social"
+      ]
+    },
+    {
+      "id": "bigtop",
+      "name": "The Big Top",
+      "tags": [
+        "public",
+        "work",
+        "social"
+      ]
+    },
+    {
+      "id": "wagons",
+      "name": "Fair Wagons",
+      "tags": [
+        "private",
+        "rest"
+      ]
+    },
+    {
+      "id": "farms",
+      "name": "The Farms",
+      "tags": [
+        "private",
+        "rest",
+        "work"
+      ]
+    },
+    {
+      "id": "inn",
+      "name": "The Plough Inn",
+      "tags": [
+        "public",
+        "social"
+      ]
+    },
+    {
+      "id": "road",
+      "name": "The North Road",
+      "tags": [
+        "public",
+        "exit"
+      ]
+    }
+  ],
+  "paths": [
+    [
+      "square",
+      "bigtop"
+    ],
+    [
+      "square",
+      "wagons"
+    ],
+    [
+      "square",
+      "farms"
+    ],
+    [
+      "square",
+      "inn"
+    ],
+    [
+      "bigtop",
+      "wagons"
+    ],
+    [
+      "farms",
+      "inn"
+    ],
+    [
+      "wagons",
+      "road"
+    ]
+  ],
+  "beliefs": [
+    {
+      "id": "fairIsBroke",
+      "text": "the fair cannot pay its people and will fold after this town",
+      "initial": 0
+    },
+    {
+      "id": "landSale",
+      "text": "the big farms are being sold to a company from the city",
+      "initial": 0
+    },
+    {
+      "id": "fairTakesAnyone",
+      "text": "the fair will take on anyone who asks by the last night",
+      "initial": 0
+    }
+  ],
+  "events": [
+    {
+      "id": "open-call",
+      "at": 9,
+      "jitterHours": 1,
+      "chance": 1,
+      "stakes": 1,
+      "where": "bigtop",
+      "headline": "The ringmaster announces: the fair is hiring.",
+      "text": "Hands wanted. Anyone. Ask before the last night.",
+      "effects": {
+        "belief": {
+          "fairTakesAnyone": 0.8
+        },
+        "mood": 0.1
+      },
+      "fx": "swarm",
+      "fxHours": 3
+    },
+    {
+      "id": "early-rumour",
+      "at": 20,
+      "jitterHours": 2,
+      "chance": 1,
+      "stakes": 1,
+      "where": "inn",
+      "headline": "A farmer says the big farms have been sold.",
+      "text": "Over the second round, someone swears they saw the surveyor's van.",
+      "effects": {
+        "belief": {
+          "landSale": 0.5
+        }
+      }
+    },
+    {
+      "id": "wages-late",
+      "at": 32,
+      "jitterHours": 2,
+      "chance": 0.6,
+      "stakes": 2,
+      "where": "bigtop",
+      "headline": "The fair's wages are late again.",
+      "text": "The strongman is owed three weeks. He says so, loudly, in the middle of rehearsal.",
+      "effects": {
+        "belief": {
+          "fairIsBroke": 0.6
+        },
+        "mood": -0.1
+      }
+    },
+    {
+      "id": "storm",
+      "at": 44,
+      "jitterHours": 2,
+      "chance": 1,
+      "stakes": 2,
+      "where": "all",
+      "headline": "A night storm flattens the smaller tents.",
+      "text": "Everyone who can lift a pole is in the mud together until dawn.",
+      "effects": {
+        "mood": -0.2
+      },
+      "fx": "storm",
+      "fxHours": 6
+    },
+    {
+      "id": "late-rumour",
+      "at": 55,
+      "jitterHours": 3,
+      "chance": 1,
+      "stakes": 2,
+      "where": "farms",
+      "headline": "The land sale is confirmed — the company takes over at harvest.",
+      "text": "A letter is read out. The farms will be one farm. Most hands will not be kept.",
+      "effects": {
+        "belief": {
+          "landSale": 0.5
+        },
+        "mood": -0.2
+      }
+    },
+    {
+      "id": "last-night",
+      "at": 66,
+      "jitterHours": 0,
+      "chance": 1,
+      "stakes": 3,
+      "where": "all",
+      "headline": "The last night. The wagons are hitched at dawn.",
+      "text": "The ringmaster closes the book. Names are taken tonight or never.",
+      "removesOption": true,
+      "fx": "aurora",
+      "fxHours": 4
+    }
+  ],
+  "ending": {
+    "prompt": "The wagons roll at dawn on the fourth day.",
+    "choices": [
+      {
+        "id": "leave",
+        "label": "Leave with the fair",
+        "pull": {
+          "trait:restless": 0.5,
+          "trait:bold": 0.3,
+          "belief:fairTakesAnyone": 0.4,
+          "belief:fairIsBroke": -0.5,
+          "belief:landSale": 0.3,
+          "bonds": -0.3,
+          "want:toSeeWhatHappensNext": 0.3
+        }
+      },
+      {
+        "id": "home",
+        "label": "Go home as before",
+        "pull": {
+          "trait:loyal": 0.6,
+          "bonds": 0.6,
+          "belief:landSale": -0.3,
+          "means": 0.3,
+          "fear:beingTheLastOneLeft": -0.1,
+          "want:toKeepWhatTheyHave": 0.3
+        }
+      },
+      {
+        "id": "change",
+        "label": "Stay, but not as before",
+        "pull": {
+          "trait:sociable": 0.3,
+          "bonds": 0.3,
+          "belief:landSale": 0.5,
+          "belief:fairIsBroke": 0.2,
+          "mood": -0.3,
+          "want:toBeNeeded": 0.3
+        }
+      }
+    ]
+  },
+  "citizens": [
+    {
+      "id": "bea",
+      "name": "Bea Corran",
+      "age": 24,
+      "role": "farmhand",
+      "want": "to see what happens next",
+      "fear": "being the last one left",
+      "traits": {
+        "sociable": 0.7,
+        "bold": 0.6,
+        "loyal": 0.5,
+        "restless": 0.8
+      },
+      "home": "farms",
+      "lean": null,
+      "ties": [
+        {
+          "to": "wil",
+          "affinity": 0.6,
+          "why": "they have shared a hayloft wall since they were six"
+        },
+        {
+          "to": "marko",
+          "affinity": 0.2,
+          "why": "he let her try the wire"
+        }
+      ]
+    },
+    {
+      "id": "wil",
+      "name": "Wil Corran",
+      "age": 27,
+      "role": "farmhand",
+      "want": "to keep what he has",
+      "fear": "having nothing",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.3,
+        "loyal": 0.9,
+        "restless": 0.2
+      },
+      "home": "farms",
+      "lean": "home",
+      "ties": [
+        {
+          "to": "bea",
+          "affinity": 0.7,
+          "why": "his sister; he promised their mother"
+        }
+      ]
+    },
+    {
+      "id": "marko",
+      "name": "Marko Vell",
+      "age": 35,
+      "role": "wire-walker",
+      "want": "to be needed",
+      "fear": "being forgotten",
+      "traits": {
+        "sociable": 0.8,
+        "bold": 0.9,
+        "loyal": 0.4,
+        "restless": 0.7
+      },
+      "home": "wagons",
+      "lean": "leave",
+      "ties": [
+        {
+          "to": "ondine",
+          "affinity": 0.5,
+          "why": "she catches him"
+        },
+        {
+          "to": "ring",
+          "affinity": -0.3,
+          "why": "three weeks owed"
+        }
+      ]
+    },
+    {
+      "id": "ondine",
+      "name": "Ondine Falk",
+      "age": 33,
+      "role": "trapeze catcher",
+      "want": "to be left alone",
+      "fear": "being wrong in public",
+      "traits": {
+        "sociable": 0.3,
+        "bold": 0.7,
+        "loyal": 0.7,
+        "restless": 0.5
+      },
+      "home": "wagons",
+      "lean": null,
+      "ties": [
+        {
+          "to": "marko",
+          "affinity": 0.6,
+          "why": "twelve years of catching him"
+        }
+      ]
+    },
+    {
+      "id": "ring",
+      "name": "Aurel Ringmaster",
+      "age": 52,
+      "role": "ringmaster",
+      "want": "to keep the fair on the road",
+      "fear": "being blamed",
+      "traits": {
+        "sociable": 0.9,
+        "bold": 0.8,
+        "loyal": 0.6,
+        "restless": 0.6
+      },
+      "home": "wagons",
+      "lean": "leave",
+      "ties": [
+        {
+          "to": "marko",
+          "affinity": -0.2,
+          "why": "the best act, and the loudest about money"
+        }
+      ]
+    },
+    {
+      "id": "hesper",
+      "name": "Hesper Dunn",
+      "age": 61,
+      "role": "innkeeper",
+      "want": "to be proven right",
+      "fear": "being forgotten",
+      "traits": {
+        "sociable": 0.8,
+        "bold": 0.5,
+        "loyal": 0.8,
+        "restless": 0.1
+      },
+      "home": "inn",
+      "lean": "home",
+      "ties": [
+        {
+          "to": "wil",
+          "affinity": 0.4,
+          "why": "his father drank here"
+        },
+        {
+          "to": "ring",
+          "affinity": -0.4,
+          "why": "last year's unpaid bar tab"
+        }
+      ]
+    },
+    {
+      "id": "tam",
+      "name": "Tam Elder",
+      "age": 17,
+      "role": "farmer's son",
+      "want": "to leave a mark",
+      "fear": "being the last one left",
+      "traits": {
+        "sociable": 0.5,
+        "bold": 0.7,
+        "loyal": 0.3,
+        "restless": 0.9
+      },
+      "home": "farms",
+      "lean": null,
+      "ties": [
+        {
+          "to": "eldra",
+          "affinity": 0.4,
+          "why": "his mother"
+        },
+        {
+          "to": "marko",
+          "affinity": 0.3,
+          "why": "he watched every show twice"
+        }
+      ]
+    },
+    {
+      "id": "eldra",
+      "name": "Eldra Elder",
+      "age": 49,
+      "role": "farm owner",
+      "want": "to keep what she has",
+      "fear": "having nothing",
+      "traits": {
+        "sociable": 0.4,
+        "bold": 0.6,
+        "loyal": 0.9,
+        "restless": 0.1
+      },
+      "home": "farms",
+      "lean": "home",
+      "ties": [
+        {
+          "to": "tam",
+          "affinity": 0.7,
+          "why": "her only son"
+        },
+        {
+          "to": "hesper",
+          "affinity": 0.5,
+          "why": "school friends, forty years"
+        }
+      ]
+    }
+  ],
+  "fill": {
+    "count": 16,
+    "roles": [
+      "farmhand",
+      "juggler",
+      "roustabout",
+      "fortune-teller",
+      "dairy hand",
+      "fiddler",
+      "shepherd",
+      "stall-keeper",
+      "strongman",
+      "seamstress"
+    ],
+    "homes": [
+      "farms",
+      "wagons"
+    ],
+    "wants": [
+      "to see what happens next",
+      "to be needed",
+      "to keep what they have",
+      "to be left alone",
+      "to be somewhere new"
+    ],
+    "fears": [
+      "being the last one left",
+      "being forgotten",
+      "having nothing",
+      "being wrong in public"
+    ]
+  },
+  "playerSlots": 10
+}

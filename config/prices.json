@@ -1,0 +1,10 @@
+{
+  "_comment": "USD per 1M tokens, from DeepSeek's published sheet (https://api-docs.deepseek.com/quick_start/pricing). These are the PEAK rates on purpose: the spend cap and every estimate should never understate. Off-peak is about half (flash input 0.15 / output 0.60; pro input 0.66 / output 1.98). cachedInput is the cache-hit rate, which is what most of a run's prompt tokens land on: the world prefix is identical call to call. Legacy ids are priced too, since a request to one is served and billed as the current model.",
+  "models": {
+    "deepseek-flash":    { "input": 0.30, "cachedInput": 0.006, "output": 1.20, "role": "citizen" },
+    "deepseek-v4-flash": { "input": 0.30, "cachedInput": 0.006, "output": 1.20 },
+    "deepseek-pro":      { "input": 1.32, "cachedInput": 0.044, "output": 3.96 },
+    "deepseek-v4-pro":   { "input": 1.32, "cachedInput": 0.044, "output": 3.96, "role": "architect" }
+  },
+  "spendCapUsdPerRun": 2
+}
